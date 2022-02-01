@@ -1,30 +1,32 @@
 // Models
-const { Product } = require('../models/product.model');
-const { Cart } = require('../models/cart.model');
-const { ProductInCart } = require('../models/productInCart.model');
+const { Product } = require("../models/product.model");
+const { Cart } = require("../models/cart.model");
+const { ProductInCart } = require("../models/productInCart.model");
+const { Order } = require("../models/order.model");
+const { ProductInOrder } = require("../models/productInOrder.model");
 
 // Utils
-const { catchAsync } = require('../utils/catchAsync');
-const { filterObj } = require('../utils/filterObj');
-const { AppError } = require('../utils/appError');
-const { formatUserCart } = require('../utils/queryFormat');
+const { catchAsync } = require("../utils/catchAsync");
+const { filterObj } = require("../utils/filterObj");
+const { AppError } = require("../utils/appError");
+const { formatUserCart } = require("../utils/queryFormat");
 
 exports.getUserCart = catchAsync(async (req, res, next) => {
 	const { currentUser } = req;
 
 	const cart = await Cart.findOne({
-		attributes: { exclude: ['userId', 'status'] },
-		where: { userId: currentUser.id, status: 'onGoing' },
+		attributes: { exclude: ["userId", "status"] },
+		where: { userId: currentUser.id, status: "onGoing" },
 		include: [
 			{
 				model: ProductInCart,
-				attributes: { exclude: ['cartId', 'status'] },
-				where: { status: 'active' },
+				attributes: { exclude: ["cartId", "status"] },
+				where: { status: "active" },
 				include: [
 					{
 						model: Product,
 						attributes: {
-							exclude: ['id', 'userId', 'price', 'quantity', 'status'],
+							exclude: ["id", "userId", "price", "quantity", "status"],
 						},
 					},
 				],
@@ -35,7 +37,7 @@ exports.getUserCart = catchAsync(async (req, res, next) => {
 	const formattedCart = formatUserCart(cart);
 
 	res.status(200).json({
-		status: 'success',
+		status: "success",
 		data: { cart: formattedCart },
 	});
 });
@@ -44,17 +46,17 @@ exports.addProductToCart = catchAsync(async (req, res, next) => {
 	const { product } = req.body;
 	const { currentUser } = req;
 
-	const filteredObj = filterObj(product, 'id', 'quantity');
+	const filteredObj = filterObj(product, "id", "quantity");
 
 	// Validate if quantity is less or equal to existing quantity
 	const productExists = await Product.findOne({
-		where: { id: filteredObj.id, status: 'active' },
+		where: { id: filteredObj.id, status: "active" },
 	});
 
 	if (!productExists || filteredObj.quantity > productExists.quantity) {
 		return next(
 			new AppError(
-				'Product does not exists or it exceeds the available quantity',
+				"Product does not exists or it exceeds the available quantity",
 				400
 			)
 		);
@@ -62,7 +64,7 @@ exports.addProductToCart = catchAsync(async (req, res, next) => {
 
 	// Check if current user already has a cart
 	const cart = await Cart.findOne({
-		where: { userId: currentUser.id, status: 'onGoing' },
+		where: { userId: currentUser.id, status: "onGoing" },
 	});
 
 	// Create new cart
@@ -86,13 +88,13 @@ exports.addProductToCart = catchAsync(async (req, res, next) => {
 			where: {
 				cartId: cart.id,
 				productId: filteredObj.id,
-				status: 'active',
+				status: "active",
 			},
 		});
 
 		if (productInCartExists) {
 			return next(
-				new AppError('You already added this product to the cart', 400)
+				new AppError("You already added this product to the cart", 400)
 			);
 		}
 
@@ -111,7 +113,7 @@ exports.addProductToCart = catchAsync(async (req, res, next) => {
 		await cart.update({ totalPrice: updatedTotalPrice });
 	}
 
-	res.status(201).json({ status: 'success' });
+	res.status(201).json({ status: "success" });
 });
 
 exports.updateProductCart = catchAsync(async (req, res, next) => {
@@ -120,11 +122,11 @@ exports.updateProductCart = catchAsync(async (req, res, next) => {
 
 	// Find user's cart
 	const userCart = await Cart.findOne({
-		where: { userId: currentUser.id, status: 'onGoing' },
+		where: { userId: currentUser.id, status: "onGoing" },
 	});
 
 	if (!userCart) {
-		return next(new AppError('Invalid cart', 400));
+		return next(new AppError("Invalid cart", 400));
 	}
 
 	// Find product in cart
@@ -132,13 +134,13 @@ exports.updateProductCart = catchAsync(async (req, res, next) => {
 		where: {
 			productId,
 			cartId: userCart.id,
-			status: 'active',
+			status: "active",
 		},
 		include: [{ model: Product }],
 	});
 
 	if (!productInCart) {
-		return next(new AppError('Invalid product', 400));
+		return next(new AppError("Invalid product", 400));
 	}
 
 	if (newQuantity > +productInCart.product.quantity) {
@@ -152,7 +154,7 @@ exports.updateProductCart = catchAsync(async (req, res, next) => {
 
 	if (newQuantity === productInCart.quantity) {
 		return next(
-			new AppError('You already have that quantity in that product', 400)
+			new AppError("You already have that quantity in that product", 400)
 		);
 	}
 
@@ -165,7 +167,7 @@ exports.updateProductCart = catchAsync(async (req, res, next) => {
 			+userCart.totalPrice - +productInCart.quantity * +productInCart.price;
 
 		// Update quantity to product in cart
-		await productInCart.update({ quantity: 0, status: 'removed' });
+		await productInCart.update({ quantity: 0, status: "removed" });
 	} else if (newQuantity > +productInCart.quantity) {
 		// New items were added
 		updatedTotalPrice =
@@ -187,15 +189,41 @@ exports.updateProductCart = catchAsync(async (req, res, next) => {
 	// Calculate new total price
 	await userCart.update({ totalPrice: updatedTotalPrice });
 
-	res.status(204).json({ status: 'success' });
+	res.status(204).json({ status: "success" });
 });
 
 exports.purchaseOrder = catchAsync(async (req, res, next) => {
+	const { currentUser } = req;
 	// 1st part:
 	// Get user's cart and get the products of the cart
-	// Set Cart status to 'purchased'
-	// Create a new order
 
+	const cart = await Cart.findOne({
+		where: {
+			userId: currentUser.id,
+			status: "onGoing",
+		},
+		include: [
+			{
+				model: ProductInCart,
+				where: {
+					status: "active",
+				},
+				// include: [
+				// 	{
+				// 		model: Product,
+				// 	},
+				// ],
+			},
+		],
+	});
+	// Set Cart status to 'purchased'
+	await cart.update({ status: "purchased" });
+	// Create a new order
+	const newOrder = await Order.create({
+		userId: currentUser.id,
+		totalPrice: cart.totalPrice,
+		date: new Date().toLocaleString(),
+	});
 	// [Promise]
 	// const promises = products.map(async () => {
 	// 	await Product.findAll()
@@ -204,15 +232,35 @@ exports.purchaseOrder = catchAsync(async (req, res, next) => {
 	// await Promise.all(promises)
 
 	// Loop through the products array, for each product
-	// Set productInCart status to 'purchased', search for cartId and productId
-	// Look for the Product (productId), substract and update the requested qty from the product's qty
-	// Create productInOrder, pass orderId, productId, qty, price
+	const promises = cart.productsInCarts.map(async (productInCart) => {
+		// Set productInCart status to 'purchased', search for cartId and productId
+		await productInCart.update({ status: "purchased" });
+		// Look for the Product (productId), substract and update the requested qty from the product's qty
+		const product = await Product.findOne({
+			where: {
+				id: productInCart.productId,
+			},
+		});
 
+		const quantity = product.quantity - productInCart.quantity;
+
+		await product.update({ quantity });
+
+		// Create productInOrder, pass orderId, productId, qty, price
+		await ProductInOrder.create({
+			orderId: newOrder.id,
+			productId: productInCart.productId,
+			price: productInCart.price,
+			quantity: productInCart.quantity,
+		});
+	});
+
+	await Promise.all(promises);
 	// 2nd part:
 	// Send email to the user that purchased the order
 	// The email must contain the total price and the list of products that it purchased
 
-	res.status(200).json({ status: 'success' });
+	res.status(200).json({ status: "success", data: { cart } });
 });
 
 // Create a controller a function that gets all the user's orders

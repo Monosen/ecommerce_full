@@ -1,25 +1,25 @@
-const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
-const dotenv = require('dotenv');
+const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
+const dotenv = require("dotenv");
 
 // Models
-const { User } = require('../models/user.model');
+const { User } = require("../models/user.model");
 
 // Utils
-const { AppError } = require('../utils/appError');
-const { catchAsync } = require('../utils/catchAsync');
-const { Email } = require('../utils/email');
+const { AppError } = require("../utils/appError");
+const { catchAsync } = require("../utils/catchAsync");
+const { Email } = require("../utils/email");
 
-dotenv.config({ path: './config.env' });
+dotenv.config({ path: "./config.env" });
 
 exports.loginUser = catchAsync(async (req, res, next) => {
 	const { email, password } = req.body;
 
 	// If user exists with given email
-	const user = await User.findOne({ where: { email, status: 'available' } });
+	const user = await User.findOne({ where: { email, status: "available" } });
 
 	if (!user || !(await bcrypt.compare(password, user.password))) {
-		return next(new AppError('Credentials are not valid', 404));
+		return next(new AppError("Credentials are not valid", 404));
 	}
 
 	// Generate JWT
@@ -34,13 +34,13 @@ exports.loginUser = catchAsync(async (req, res, next) => {
 		),
 	};
 
-	if (process.env.NODE_ENV === 'production') cookieOptions.secure = true;
+	if (process.env.NODE_ENV === "production") cookieOptions.secure = true;
 
 	// http -> https
-	res.cookie('jwt', token, cookieOptions);
+	res.cookie("jwt", token, cookieOptions);
 
 	res.status(200).json({
-		status: 'success',
+		status: "success",
 		token,
 	});
 });
@@ -49,16 +49,16 @@ exports.getUserById = catchAsync(async (req, res, next) => {
 	const { id } = req.params;
 
 	const user = await User.findOne({
-		attributes: { exclude: ['password'] },
+		attributes: { exclude: ["password"] },
 		where: { id },
 	});
 
 	if (!user) {
-		return next(new AppError('User not found', 404));
+		return next(new AppError("User not found", 404));
 	}
 
 	res.status(200).json({
-		status: 'success',
+		status: "success",
 		data: {
 			user,
 		},
@@ -75,17 +75,17 @@ exports.createUser = catchAsync(async (req, res, next) => {
 		name,
 		email,
 		password: hashedPassword,
-		role: role || 'standard',
+		role: role || "standard",
 	});
 
 	// Remove password from response
 	newUser.password = undefined;
 
 	// Send welcome Email to user
-	await new Email(newUser.email).sendWelcome(newUser.name, newUser.email);
+	// await new Email(newUser.email).sendWelcome(newUser.name, newUser.email);
 
 	res.status(201).json({
-		status: 'success',
+		status: "success",
 		data: { user: newUser },
 	});
 });
@@ -97,12 +97,12 @@ exports.updateUser = catchAsync(async (req, res, next) => {
 	const user = await User.findOne({ where: { id } });
 
 	if (!user) {
-		return next(new AppError('No user found with this id', 404));
+		return next(new AppError("No user found with this id", 404));
 	}
 
 	await user.update({ name, email });
 
-	res.status(204).json({ status: 'success' });
+	res.status(204).json({ status: "success" });
 });
 
 exports.disableUserAccount = catchAsync(async (req, res, next) => {
@@ -111,10 +111,10 @@ exports.disableUserAccount = catchAsync(async (req, res, next) => {
 	const user = await User.findOne({ where: { id } });
 
 	if (!user) {
-		return next(new AppError('User not found', 404));
+		return next(new AppError("User not found", 404));
 	}
 
-	await user.update({ status: 'disabled' });
+	await user.update({ status: "disabled" });
 
-	res.status(204).json({ status: 'success' });
+	res.status(204).json({ status: "success" });
 });
