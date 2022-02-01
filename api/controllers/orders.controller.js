@@ -260,7 +260,7 @@ exports.purchaseOrder = catchAsync(async (req, res, next) => {
 	// Send email to the user that purchased the order
 	// The email must contain the total price and the list of products that it purchased
 
-	res.status(200).json({ status: "success", data: { cart } });
+	res.status(200).json({ status: "success" });
 });
 
 // Create a controller a function that gets all the user's orders
