@@ -8,6 +8,7 @@ const {
 	purchaseOrder,
 	getAllOrders,
 	getOrderById,
+	disableProductToCart,
 } = require("../controllers/orders.controller");
 
 // Middlewares
@@ -39,6 +40,7 @@ router.patch(
 );
 
 // Remove product from cart
+router.delete("/product/:id", disableProductToCart);
 
 // Create order
 router.get("/purchase-order", purchaseOrder);

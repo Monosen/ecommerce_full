@@ -284,3 +284,29 @@ exports.getOrderById = catchAsync(async (req, res, next) => {
 
 	res.status(200).json({ status: "success", data: { order } });
 });
+
+exports.disableProductToCart = catchAsync(async (req, res, next) => {
+	const { currentUser } = req;
+	const { id } = req.params;
+
+	const cart = await Cart.findOne({
+		where: { userId: currentUser.id, status: "onGoing" },
+		include: [
+			{ model: ProductInCart, where: { productId: id, status: "active" } },
+		],
+	});
+
+	if (!cart) {
+		return next(new AppError("invalide cart", 400));
+	}
+
+	const { productsInCarts } = cart;
+
+	if (!productsInCarts) {
+		return next(new AppError("invalide product", 400));
+	}
+
+	await productsInCarts[0].update({ status: "removed" });
+
+	res.status(200).json({ status: "success" });
+});
