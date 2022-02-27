@@ -1,0 +1,8 @@
+{
+	"editor.tabSize": 4,
+	"editor.wordWrap": "on",
+	"emmet.includeLanguages": {
+		"javascript": "javascriptreact"
+	},
+	"editor.bracketPairColorization.enabled": true
+}

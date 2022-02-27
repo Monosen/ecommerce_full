@@ -1,23 +1,34 @@
 import React, { useState } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, Link } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 import UserNavBar from "../UserNavBar";
+import CartBody from "../CartBody";
 
 import { RiShoppingCartLine, RiUser3Fill } from "react-icons/ri";
 
 const index = () => {
 	const [userNavbar, setUserNavbar] = useState(false);
+	const [cartNavbar, setCartNavbar] = useState(false);
+
+	const { token } = useSelector((store) => store.session);
 
 	const handlerUserNavBar = () => {
 		setUserNavbar(!userNavbar);
-		console.log(userNavbar);
 	};
 
+	const handlerCartNavBar = () => {
+		setCartNavbar(!cartNavbar);
+	};
+	console.log(token);
+
 	return (
-		<nav className="py-5 fixed w-full top-0 bg-white">
-			<div className="container mx-auto px-4 sm:px-10 md:px-20 lg:max-w-6xl">
-				<div className="flex justify-between items-center">
-					<h2 className="capitalize text-2xl">MonoShop</h2>
+		<nav className="fixed top-0 left-0 z-50 w-full py-5 bg-white">
+			<div className="container px-4 mx-auto sm:px-10 md:px-20 lg:max-w-6xl">
+				<div className="flex items-center justify-between">
+					<Link to={`/`} className="text-2xl capitalize">
+						MonoShop
+					</Link>
 					<ul>
 						<li className="inline-block">
 							<NavLink
@@ -29,26 +40,35 @@ const index = () => {
 								Inicio
 							</NavLink>
 						</li>
-						<li className="inline-block">
-							<NavLink
-								className={({ isActive }) =>
-									isActive ? "text-red-400 px-4 py-3" : "px-4 py-3 text-black"
-								}
-								to={`/deshboard`}
-							>
-								Deshbord
-							</NavLink>
-						</li>
+						{token && (
+							<li className="inline-block">
+								<NavLink
+									className={({ isActive }) =>
+										isActive ? "text-red-400 px-4 py-3" : "px-4 py-3 text-black"
+									}
+									to={`/dashboard`}
+								>
+									Deshbord
+								</NavLink>
+							</li>
+						)}
 					</ul>
-					<div className="flex w-14 justify-between">
-						<RiShoppingCartLine className="text-lg" />
-						<button
-							className="relative flex justify-center"
-							onClick={handlerUserNavBar}
-						>
-							<RiUser3Fill className="text-lg" />
+					<div className="flex justify-between w-14">
+						<div>
+							<RiShoppingCartLine
+								className="text-lg"
+								onClick={handlerCartNavBar}
+							/>
+							<CartBody
+								cartNavbar={cartNavbar}
+								handlerCartNavBar={handlerCartNavBar}
+							/>
+						</div>
+
+						<div className="relative flex justify-center">
+							<RiUser3Fill className="text-lg" onClick={handlerUserNavBar} />
 							{userNavbar && <UserNavBar />}
-						</button>
+						</div>
 					</div>
 				</div>
 			</div>

@@ -45,7 +45,7 @@ else app.use(morgan('combined'));
 
 // Limit requests from same API
 const limiter = rateLimit({
-	max: 100,
+	max: 1000,
 	windowMs: 60 * 60 * 1000, // 1 hour
 	message: 'Too many requests from this IP, please try again in an hour!',
 });
@@ -54,7 +54,7 @@ app.use('/api', limiter);
 // Body parser, reading data from the body into req.body
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(cookieParser());
+// app.use(cookieParser());
 
 // Data sanitization against XSS
 app.use(xss());
