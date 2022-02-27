@@ -96,30 +96,18 @@ exports.createUser = catchAsync(async (req, res, next) => {
 });
 
 exports.updateUser = catchAsync(async (req, res, next) => {
-	const { id } = req.params;
+	const { currentUser } = req;
 	const { name, email } = req.body;
 
-	const user = await User.findOne({ where: { id } });
-
-	if (!user) {
-		return next(new AppError("No user found with this id", 404));
-	}
-
-	await user.update({ name, email });
+	await currentUser.update({ name, email });
 
 	res.status(204).json({ status: "success" });
 });
 
 exports.disableUserAccount = catchAsync(async (req, res, next) => {
-	const { id } = req.params;
+	const { currentUser } = req;
 
-	const user = await User.findOne({ where: { id } });
-
-	if (!user) {
-		return next(new AppError("User not found", 404));
-	}
-
-	await user.update({ status: "disabled" });
+	await currentUser.update({ status: "disabled" });
 
 	res.status(204).json({ status: "success" });
 });

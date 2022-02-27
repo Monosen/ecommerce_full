@@ -75,13 +75,13 @@ exports.protectProductOwner = catchAsync(async (req, res, next) => {
 	next();
 });
 
-exports.protectUser = catchAsync(async (req, res, next) => {
-	const { currentUser } = req;
-	const { id } = req.params;
+// exports.protectUser = catchAsync(async (req, res, next) => {
+// 	const { currentUser } = req;
+// 	const { id } = req.params;
 
-	if (+currentUser.id !== +id) {
-		return next(new AppError('You do not own this account', 401));
-	}
+// 	if (+currentUser.id !== +id) {
+// 		return next(new AppError('You do not own this account', 401));
+// 	}
 
-	next();
-});
+// 	next();
+// });
