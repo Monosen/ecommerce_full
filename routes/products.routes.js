@@ -38,6 +38,8 @@ router
 		createProduct
 	);
 
+router.get("/:id", getProductDetails);
+
 router.use(protectSession);
 
 router.get("/user-products", getUserProducts);
@@ -47,7 +49,6 @@ router.get("/user-products", getUserProducts);
 // Remove product
 router
 	.route("/:id")
-	.get(getProductDetails)
 	.patch(protectProductOwner, updateProduct)
 	.delete(protectProductOwner, disableProduct);
 

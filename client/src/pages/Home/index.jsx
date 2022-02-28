@@ -24,20 +24,22 @@ const index = () => {
 
 			<Hero />
 
-			<div className="text-center">
-				<h3 className="mt-24 mb-3 text-5xl">Best Products</h3>
-				<p>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
-			</div>
+			<div className="container mx-auto max-w-7xl">
+				<div className="text-center">
+					<h3 className="mt-24 mb-3 text-5xl">Best Products</h3>
+					<p>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
+				</div>
 
-			<div className="grid grid-cols-2 mx-auto mt-24 justify-items-center gap-y-24">
-				{allProducts?.map((product) => (
-					<Product
-						key={product.id}
-						id={product.id}
-						name={product.name}
-						price={product.price}
-					/>
-				))}
+				<div className="grid grid-cols-1 mx-auto mt-24 md:grid-cols-2 xl:grid-cols-3 justify-items-center gap-y-24">
+					{allProducts?.map((product) => (
+						<Product
+							key={product.id}
+							id={product.id}
+							name={product.name}
+							price={product.price}
+						/>
+					))}
+				</div>
 			</div>
 		</>
 	);
