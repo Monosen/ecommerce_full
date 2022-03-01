@@ -37,6 +37,7 @@ const index = () => {
 							id={product.id}
 							name={product.name}
 							price={product.price}
+							userProduct={product.user}
 						/>
 					))}
 				</div>

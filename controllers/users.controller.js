@@ -51,16 +51,16 @@ exports.loginUser = catchAsync(async (req, res, next) => {
 });
 
 exports.getUserById = catchAsync(async (req, res, next) => {
-	const { id } = req.params;
+	const { currentUser: user } = req;
 
-	const user = await User.findOne({
-		attributes: { exclude: ["password"] },
-		where: { id },
-	});
+	// const user = await User.findOne({
+	// 	attributes: { exclude: ["password"] },
+	// 	where: { id },
+	// });
 
-	if (!user) {
-		return next(new AppError("User not found", 404));
-	}
+	// if (!user) {
+	// 	return next(new AppError("User not found", 404));
+	// }
 
 	res.status(200).json({
 		status: "success",

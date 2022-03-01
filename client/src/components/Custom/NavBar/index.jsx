@@ -20,7 +20,6 @@ const index = () => {
 	const handlerCartNavBar = () => {
 		setCartNavbar(!cartNavbar);
 	};
-	console.log(token);
 
 	return (
 		<nav className="fixed top-0 left-0 z-50 w-full py-5 bg-white">
@@ -37,7 +36,7 @@ const index = () => {
 								}
 								to={`/`}
 							>
-								Inicio
+								Home
 							</NavLink>
 						</li>
 						{token && (
@@ -66,7 +65,10 @@ const index = () => {
 						</div>
 
 						<div className="relative flex justify-center">
-							<RiUser3Fill className="text-lg" onClick={handlerUserNavBar} />
+							<RiUser3Fill
+								className={`text-lg ${token ? "text-red-500" : "text-black"}`}
+								onClick={handlerUserNavBar}
+							/>
 							{userNavbar && <UserNavBar />}
 						</div>
 					</div>

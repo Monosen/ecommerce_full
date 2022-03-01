@@ -1,11 +1,13 @@
-import axios from "axios";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import axios from "axios";
 
 import ProductCart from "../ProductCart";
 
+import { handlerAddAllProductsInCart } from "../../../redux/actions/cart.action";
+
 const index = ({ cartNavbar, handlerCartNavBar }) => {
-	const [allProductCart, setAllProductCart] = useState({});
+	const dispatch = useDispatch();
 
 	const { token } = useSelector((store) => store.session);
 	const { cart } = useSelector((store) => store.cart);
@@ -13,16 +15,19 @@ const index = ({ cartNavbar, handlerCartNavBar }) => {
 	useEffect(() => {
 		const handlerAllProductCart = async () => {
 			if (token) {
-				const data = await axios.get(
+				const { data } = await axios.get(
 					`http://localhost:4000/api/v1/orders/get-cart`,
 					{
-						Headers: { Authorization: `Bearer ${token}` },
+						headers: { Authorization: `Bearer ${token}` },
 					}
 				);
+				const { cart } = data.data;
+				console.log(cart);
+				dispatch(handlerAddAllProductsInCart({ cart: cart.products }));
 			}
 		};
 		handlerAllProductCart();
-	}, []);
+	}, [cartNavbar]);
 
 	return (
 		<section

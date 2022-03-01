@@ -16,7 +16,7 @@ const index = () => {
 	const [loader, setLoader] = useState(true);
 
 	const { id } = useParams();
-	const { token } = useSelector((store) => store.session);
+	const { token, user } = useSelector((store) => store.session);
 	const dispatch = useDispatch();
 
 	useEffect(() => {
@@ -92,12 +92,14 @@ const index = () => {
 
 								<p>owner: {product?.user?.name}</p>
 
-								<button
-									className="px-3 py-2 text-base text-white bg-red-400 border border-white rounded-lg hover:bg-white hover:border-red-400 hover:text-red-400"
-									onClick={handlerAddProduct}
-								>
-									Add to cart
-								</button>
+								{product?.user?.id !== user?.id && (
+									<button
+										className="px-3 py-2 text-base text-white bg-red-400 border border-white rounded-lg hover:bg-white hover:border-red-400 hover:text-red-400"
+										onClick={handlerAddProduct}
+									>
+										Add to cart
+									</button>
+								)}
 							</div>
 						</>
 					)}

@@ -7,13 +7,13 @@ import {
 	handlerFillProductInCart,
 } from "../../../redux/actions/cart.action";
 
-const index = ({ name, price, id }) => {
+const index = ({ name, price, id, userProduct }) => {
 	const dispatch = useDispatch();
-	const { token } = useSelector((store) => store.session);
+	const { token, user } = useSelector((store) => store.session);
 
 	const handlerAddProduct = () => {
 		if (token) {
-			dispatch(handlerProductInCart({ name, price, quantity: 1, id }));
+			dispatch(handlerProductInCart({ name, price, quantity: 1, id, token }));
 		} else {
 			dispatch(handlerFillProductInCart({ name, price, quantity: 1, id }));
 		}
@@ -31,12 +31,14 @@ const index = ({ name, price, id }) => {
 					<h5 className="text-2xl">{name}</h5>
 					<p>${price}</p>
 					<div className="flex items-center w-full justify-evenly">
-						<button
-							className="px-3 py-2 text-base text-white bg-red-400 border border-white rounded-lg hover:bg-white hover:border-red-400 hover:text-red-400"
-							onClick={handlerAddProduct}
-						>
-							Add to cart
-						</button>
+						{user?.id !== userProduct?.id && (
+							<button
+								className="px-3 py-2 text-base text-white bg-red-400 border border-white rounded-lg hover:bg-white hover:border-red-400 hover:text-red-400"
+								onClick={handlerAddProduct}
+							>
+								Add to cart
+							</button>
+						)}
 						<Link
 							className="px-3 py-2 text-red-400 border border-red-400 rounded-lg hover:bg-red-400 hover:border-white hover:text-white"
 							to={`/product/${id}`}

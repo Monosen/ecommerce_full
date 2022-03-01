@@ -29,6 +29,13 @@ export const productCartReducer = (state = initialState, action) => {
 				count: state.count,
 				total: state.total,
 			};
+		case productInCartTypes.ADDALL:
+			return {
+				...state,
+				cart: action.payload.cart,
+				count: state.count,
+				total: state.total,
+			};
 		default:
 			return state;
 	}

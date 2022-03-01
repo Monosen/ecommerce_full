@@ -1,15 +1,48 @@
-import { useSelector } from "react-redux";
-import { Navigate } from "react-router-dom";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import axios from "axios";
 
-import "./App.css";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Dashboarg from "./pages/Dashboard";
 import ProductInfo from "./pages/ProductInfo";
 
+import { handlerFillUserInfoAction } from "./redux/actions/login.action";
+
+import "./App.css";
+
 const App = () => {
+	const dispatch = useDispatch();
 	const { token } = useSelector((store) => store.session);
+
+	useEffect(() => {
+		const handlerLoginWithToken = async () => {
+			try {
+				if (sessionStorage.getItem("token") && !token) {
+					const { data } = await axios.get(
+						"http://localhost:4000/api/v1/users/get-user",
+						{
+							headers: {
+								Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+							},
+						}
+					);
+					const { user } = data.data;
+
+					dispatch(
+						handlerFillUserInfoAction({
+							user,
+							token: sessionStorage.getItem("token"),
+						})
+					);
+				}
+			} catch (error) {
+				console.log(error);
+			}
+		};
+		handlerLoginWithToken();
+	}, []);
 
 	return (
 		<BrowserRouter>
