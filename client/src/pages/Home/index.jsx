@@ -4,6 +4,7 @@ import axios from 'axios';
 import Product from '../../components/Home/Product';
 import NavBar from '../../components/Custom/NavBar';
 import Hero from '../../components/Home/Hero';
+import Footer from '../../components/Custom/Footer';
 
 const index = () => {
     const [allProducts, setAllProducts] = useState([]);
@@ -47,6 +48,8 @@ const index = () => {
                     ))}
                 </div>
             </div>
+
+            <Footer />
         </>
     );
 };
