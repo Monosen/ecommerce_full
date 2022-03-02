@@ -13,7 +13,7 @@ const index = () => {
         <footer>
             <div className="container px-2 pt-20 mx-auto sm:px-5 md:px-10 lg:max-w-8xl">
                 <div className="bg-[#F7F8F9] min-h-[65vh] rounded-3xl">
-                    <div className="flex flex-col flex-wrap justify-between w-10/12 min-h-[65vh]  pt-10 mx-auto text-center md:flex-row md:justify-center">
+                    <div className="flex flex-col flex-wrap justify-between w-10/12 min-h-[65vh]  py-10 mx-auto text-center md:flex-row md:justify-center">
                         <div className="basis-6/12">
                             <h3 className="mb-4 text-3xl">MonoShop</h3>
                             <p>

@@ -6,6 +6,7 @@ import axios from 'axios';
 import NavBar from '../../components/Custom/NavBar';
 import Loader from '../../components/Custom/Loader';
 import ImgProduct from '../../components/ProductInfo/ImgProduct';
+import Footer from '../../components/Custom/Footer';
 
 import {
     handlerFillProductInCart,
@@ -132,6 +133,7 @@ const index = () => {
                     )}
                 </div>
             </div>
+            <Footer />
         </>
     );
 };
