@@ -15,7 +15,6 @@ const index = () => {
                 `http://localhost:4000/api/v1/products`
             );
             const { products } = data.data;
-            console.log(products);
             setAllProducts(products);
         };
         handlerFetchData();
