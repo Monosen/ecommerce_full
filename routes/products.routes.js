@@ -38,11 +38,11 @@ router
         createProduct
     );
 
+router.get('/user-products', protectSession, getUserProducts);
+
 router.get('/:id', getProductDetails);
 
 router.use(protectSession);
-
-router.get('/user-products', getUserProducts);
 
 // Get product's details
 // Update product

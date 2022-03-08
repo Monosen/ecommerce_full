@@ -5,6 +5,7 @@ import Product from '../../components/Home/Product';
 import NavBar from '../../components/Custom/NavBar';
 import Hero from '../../components/Home/Hero';
 import Footer from '../../components/Custom/Footer';
+import ButtonTop from '../../components/Custom/ButtonTop';
 
 const index = () => {
     const [allProducts, setAllProducts] = useState([]);
@@ -26,6 +27,7 @@ const index = () => {
 
             <Hero />
 
+            <ButtonTop />
             <div className="container mx-auto max-w-7xl">
                 <div className="text-center">
                     <h3 className="mt-24 mb-3 text-5xl">Best Products</h3>

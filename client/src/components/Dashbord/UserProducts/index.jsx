@@ -1,7 +1,43 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
+import axios from 'axios';
+
+import ProductUser from '../../Dashbord/ProductUser';
 
 const index = () => {
-    return <div>pro</div>;
+    const [allProducts, setAllProducts] = useState([]);
+
+    const { token } = useSelector((store) => store.session);
+
+    useEffect(() => {
+        const handlerAllProducts = async () => {
+            const { data } = await axios.get(
+                `http://localhost:4000/api/v1/products/user-products`,
+                { headers: { Authorization: `Bearer ${token}` } }
+            );
+
+            const { products } = data.data;
+            console.log(products);
+            setAllProducts(products);
+        };
+
+        handlerAllProducts();
+    }, []);
+
+    return (
+        <div className="flex items-center w-full min-h-[30rem] gap-4 overflow-x-auto">
+            {allProducts.length > 0 &&
+                allProducts.map((product) => (
+                    <ProductUser
+                        key={product.id}
+                        name={product.name}
+                        price={product.price}
+                        id={product.id}
+                        img={product.productImgs[0].imgPath}
+                    />
+                ))}
+        </div>
+    );
 };
 
 export default index;

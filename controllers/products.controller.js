@@ -130,8 +130,13 @@ exports.getUserProducts = catchAsync(async (req, res, next) => {
     const { currentUser } = req;
 
     const products = await Product.findAll({
-        where: { userId: currentUser.id }
+        where: { userId: currentUser.id, status: 'active' },
+        include: [{ model: ProductImg, where: { status: 'active' } }]
     });
+
+    if (!products) {
+        return next(new AppError('user products not exits', 401));
+    }
 
     res.status(200).json({
         status: 'success',
