@@ -29,9 +29,9 @@ const index = ({ name, price, id, img, userProduct }) => {
                 <img
                     className="border rounded-lg drop-shadow-lg"
                     src={`${
-                        img
+                        img.includes('http')
                             ? img
-                            : 'https://canary.contestimg.wish.com/api/webimage/5d4b6dcf3f80797d77e0fb7a-4-large.jpg'
+                            : 'https://st4.depositphotos.com/14953852/24787/v/600/depositphotos_247872612-stock-illustration-no-image-available-icon-vector.jpg'
                     }`}
                     alt="react shirt"
                 />

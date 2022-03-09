@@ -1,63 +1,77 @@
-import { useEffect } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import axios from "axios";
+import { useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import {
+    BrowserRouter,
+    Routes,
+    Route,
+    Navigate,
+    Outlet
+} from 'react-router-dom';
+import axios from 'axios';
 
-import Home from "./pages/Home";
-import Login from "./pages/Login";
-import Dashboarg from "./pages/Dashboard";
-import ProductInfo from "./pages/ProductInfo";
+import Home from './pages/Home';
+import Login from './pages/Login';
+import Dashboarg from './pages/Dashboard';
+import ProductInfo from './pages/ProductInfo';
 
-import { handlerFillUserInfoAction } from "./redux/actions/login.action";
+import UserProducts from './components/Dashbord/UserProducts';
+import FormAddProducts from './components/Dashbord/FormAddProduct';
 
-import "./App.css";
+import { handlerFillUserInfoAction } from './redux/actions/login.action';
+
+import './App.css';
 
 const App = () => {
-	const dispatch = useDispatch();
-	const { token } = useSelector((store) => store.session);
+    const dispatch = useDispatch();
+    const { token } = useSelector((store) => store.session);
 
-	useEffect(() => {
-		const handlerLoginWithToken = async () => {
-			try {
-				if (sessionStorage.getItem("token") && !token) {
-					const { data } = await axios.get(
-						"http://localhost:4000/api/v1/users/get-user",
-						{
-							headers: {
-								Authorization: `Bearer ${sessionStorage.getItem("token")}`,
-							},
-						}
-					);
-					const { user } = data.data;
+    useEffect(() => {
+        const handlerLoginWithToken = async () => {
+            try {
+                if (sessionStorage.getItem('token') && !token) {
+                    const { data } = await axios.get(
+                        'http://localhost:4000/api/v1/users/get-user',
+                        {
+                            headers: {
+                                Authorization: `Bearer ${sessionStorage.getItem(
+                                    'token'
+                                )}`
+                            }
+                        }
+                    );
+                    const { user } = data.data;
 
-					dispatch(
-						handlerFillUserInfoAction({
-							user,
-							token: sessionStorage.getItem("token"),
-						})
-					);
-				}
-			} catch (error) {
-				console.log(error);
-			}
-		};
-		handlerLoginWithToken();
-	}, []);
+                    dispatch(
+                        handlerFillUserInfoAction({
+                            user,
+                            token: sessionStorage.getItem('token')
+                        })
+                    );
+                }
+            } catch (error) {
+                console.log(error);
+            }
+        };
+        handlerLoginWithToken();
+    }, []);
 
-	return (
-		<BrowserRouter>
-			<Routes>
-				<Route path="/" element={<Home />} />
-				<Route path="/login" element={<Login />} />
-				<Route
-					path="/dashboard"
-					element={token ? <Dashboarg /> : <Navigate to={"/"} />}
-				/>
-				<Route path="/product/:id" element={<ProductInfo />} />
-				<Route path="*" element={<div>error 404</div>} />
-			</Routes>
-		</BrowserRouter>
-	);
+    return (
+        <BrowserRouter>
+            <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/login" element={<Login />} />
+                <Route
+                    path="/dashboard"
+                    element={token ? <Dashboarg /> : <Navigate to={'/'} />}
+                >
+                    <Route path="products" element={<UserProducts />} />
+                    <Route path="productsAdd" element={<FormAddProducts />} />
+                </Route>
+                <Route path="/product/:id" element={<ProductInfo />} />
+                <Route path="*" element={<div>error 404</div>} />
+            </Routes>
+        </BrowserRouter>
+    );
 };
 
 export default App;

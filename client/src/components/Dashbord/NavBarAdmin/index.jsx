@@ -2,49 +2,60 @@ import React from 'react';
 import { NavLink } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 
-import { FaUserCircle, FaProductHunt } from 'react-icons/fa';
-import { BiAddToQueue } from 'react-icons/bi';
-import { GrAddCircle } from 'react-icons/gr';
+import UserImg from '../../../img/Login/undraw_profile_pic_ic5t.png';
 
-const index = () => {
+const index = ({ statusMenu, handlerActiveMenu }) => {
     const { user } = useSelector((store) => store.session);
 
     return (
-        <nav>
-            <div className="fixed z-50 text-white bg-red-400 rounded-lg w-36 left-4 inset-y-5 ">
-                <FaUserCircle className="mx-auto mt-3 text-8xl" />
+        <nav
+            className={`fixed inset-y-0 z-50 w-48 text-white bg-purple-500 min-h-screen transition-all duration-500 ease-in-out py-5 ${
+                statusMenu ? 'left-0' : '-left-full'
+            }`}
+        >
+            <div className="h-1/6">
+                <img
+                    className="object-cover mx-auto rounded-full w-28 h-28"
+                    src={UserImg}
+                    alt="avatar"
+                />
                 <h3 className="pb-5 mt-2 text-center capitalize">
                     {user.name}
                 </h3>
-                <div className="w-9/12 mx-auto">
-                    <div className="flex items-center justify-evenly">
-                        <FaProductHunt />
-                        <NavLink
-                            to={({ isActive }) => (isActive ? '' : '')}
-                            onClick={() => {}}
-                        >
-                            product
-                        </NavLink>
-                    </div>
-                    <div className="flex items-center justify-evenly">
-                        <BiAddToQueue />
-                        <NavLink
-                            to={({ isActive }) => (isActive ? '' : '')}
-                            onClick={() => {}}
-                        >
-                            add to product
-                        </NavLink>
-                    </div>
-                    <div className="flex items-center justify-evenly">
-                        <GrAddCircle />
-                        <NavLink
-                            to={({ isActive }) => (isActive ? '' : '')}
-                            onClick={() => {}}
-                        >
-                            to product
-                        </NavLink>
-                    </div>
-                </div>
+            </div>
+            <div className="flex flex-col items-center w-9/12 mx-auto h-5/6">
+                <NavLink
+                    className={({ isActive }) =>
+                        isActive
+                            ? 'capitalize my-3 border p-2 rounded-lg bg-white text-purple-700 border-purple-700'
+                            : 'capitalize my-3 p-2'
+                    }
+                    to={`products`}
+                >
+                    product
+                </NavLink>
+
+                <NavLink
+                    className={({ isActive }) =>
+                        isActive
+                            ? 'capitalize mb-3 border p-2 rounded-lg bg-white text-purple-700 border-purple-700'
+                            : 'capitalize mb-3 p-2'
+                    }
+                    to={`productsAdd`}
+                >
+                    add to product
+                </NavLink>
+
+                <NavLink
+                    className={({ isActive }) =>
+                        isActive
+                            ? 'capitalize border p-2 rounded-lg bg-white text-purple-700 border-purple-700'
+                            : 'capitalize p-2'
+                    }
+                    to={'/'}
+                >
+                    to product
+                </NavLink>
             </div>
         </nav>
     );

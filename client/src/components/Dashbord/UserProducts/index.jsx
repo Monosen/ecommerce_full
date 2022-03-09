@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import axios from 'axios';
 
-import ProductUser from '../../Dashbord/ProductUser';
+import ItemProduct from '../../Dashbord/ItemProduct';
 
 const index = () => {
     const [allProducts, setAllProducts] = useState([]);
@@ -25,10 +25,10 @@ const index = () => {
     }, []);
 
     return (
-        <div className="flex items-center w-full min-h-[30rem] gap-4 overflow-x-auto">
+        <div className="grid grid-cols-3 justify-items-center gap-y-24">
             {allProducts.length > 0 &&
                 allProducts.map((product) => (
-                    <ProductUser
+                    <ItemProduct
                         key={product.id}
                         name={product.name}
                         price={product.price}

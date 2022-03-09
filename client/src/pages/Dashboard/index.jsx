@@ -1,26 +1,39 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { Outlet } from 'react-router-dom';
 
 import NavBarAdmin from '../../components/Dashbord/NavBarAdmin';
-import FormAddProduct from '../../components/Dashbord/FormAddProduct';
-import UserProducts from '../../components/Dashbord/UserProducts';
+import ButtomHome from '../../components/Custom/ButtonHome';
+
+import { BsArrowRight } from 'react-icons/bs';
 
 const index = () => {
+    const [statusMenu, setStatusMenu] = useState(true);
+
+    const handlerActiveMenu = () => {
+        setStatusMenu(!statusMenu);
+    };
+
     return (
-        <div className="w-full h-screen">
-            <NavBarAdmin />
+        <>
+            <NavBarAdmin
+                statusMenu={statusMenu}
+                handlerActiveMenu={handlerActiveMenu}
+            />
 
-            <span className="absolute inset-x-0 top-0 h-40 bg-red-600 -z-10"></span>
+            <button
+                className="fixed flex items-center justify-center h-6 text-white bg-purple-400 rounded-md bottom-5 left-5 w-7"
+                onClick={handlerActiveMenu}
+            >
+                <BsArrowRight className="text-xl" />
+            </button>
 
             <div className="pt-20 ml-48 mr-4">
-                <FormAddProduct />
+                <ButtomHome />
+                <Outlet />
             </div>
 
-            <div className="pt-20 ml-48 mr-4">
-                <div className="bg-blue-300 min-h-[23rem] rounded-lg">
-                    <UserProducts />
-                </div>
-            </div>
-        </div>
+            <div className="pt-20 ml-48 mr-4"></div>
+        </>
     );
 };
 
