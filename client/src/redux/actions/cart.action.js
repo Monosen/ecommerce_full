@@ -22,16 +22,30 @@ export const handlerProductInCart = ({ name, price, quantity, id, token }) => {
                 }
             );
 
-            dispatch(handlerFillProductInCart({ name, price, quantity, id }));
+            dispatch(handlerAddProductInCart({ name, price, quantity, id }));
         } catch (error) {
             console.log(error);
         }
     };
 };
 
-export const handlerFillProductInCart = (product) => {
+export const handlerAddProductInCart = (product) => {
     return {
         type: productInCartTypes.ADD,
+        payload: product
+    };
+};
+
+export const handlerSubsProductsInCart = (product) => {
+    return {
+        type: productInCartTypes.SUB,
+        payload: product
+    };
+};
+
+export const handlerDeleteProductInCart = (product) => {
+    return {
+        type: productInCartTypes.DELETE,
         payload: product
     };
 };

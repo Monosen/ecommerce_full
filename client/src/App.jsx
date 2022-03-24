@@ -1,12 +1,6 @@
 import { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import {
-    BrowserRouter,
-    Routes,
-    Route,
-    Navigate,
-    Outlet
-} from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import axios from 'axios';
 
 import Home from './pages/Home';
@@ -55,7 +49,7 @@ const App = () => {
             }
         };
         handlerLoginWithToken();
-    }, []);
+    }, [token]);
 
     return (
         <BrowserRouter>

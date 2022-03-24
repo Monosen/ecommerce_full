@@ -31,6 +31,17 @@ export const productCartReducer = (state = initialState, action) => {
                 count: state.count,
                 total: state.total
             };
+        case productInCartTypes.DELETE:
+            return {
+                ...state,
+                cart: state.cart.filter(
+                    (product) => product.id !== action.payload.id
+                ),
+                count: state.count - action.payload.quantity,
+                total:
+                    state.total -
+                    +action.payload.price * action.payload.quantity
+            };
         case productInCartTypes.ADDALL:
             return {
                 ...state,

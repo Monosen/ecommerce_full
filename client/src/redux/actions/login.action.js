@@ -4,7 +4,6 @@ import { loginTypes } from '../types/login.types';
 export const handlerLoginWithEmailAction = ({ email, password }) => {
     return async (dispatch) => {
         try {
-            // console.log(`${userName}, ${email}, ${password}`);
             const { data } = await axios.post(
                 `${import.meta.env.VITE_APP_API_URL}/api/v1/users/login`,
                 {
@@ -17,8 +16,6 @@ export const handlerLoginWithEmailAction = ({ email, password }) => {
 
             sessionStorage.setItem('token', token);
 
-            console.log(token);
-            console.log(user);
             dispatch(handlerFillUserInfoAction({ user, token }));
         } catch (error) {
             console.log(error);
@@ -30,5 +27,23 @@ export const handlerFillUserInfoAction = (userInfo) => {
     return {
         type: loginTypes.LOGIN,
         payload: userInfo
+    };
+};
+
+export const handlerCreateAccount = (infoUser) => {
+    return async (dispatch) => {
+        try {
+            const { data } = await axios.post(
+                `${import.meta.env.VITE_APP_API_URL}/api/v1/users`,
+                { ...infoUser }
+            );
+
+            const { email } = data.data.user;
+            const { password } = infoUser;
+
+            dispatch(handlerLoginWithEmailAction({ email, password }));
+        } catch (error) {
+            console.log(error);
+        }
     };
 };

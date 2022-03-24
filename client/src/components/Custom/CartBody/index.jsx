@@ -54,9 +54,10 @@ const index = ({ cartNavbar, handlerCartNavBar }) => {
                             />
                         </div>
                         <div>
-                            {cart.map((product, index) => (
+                            {cart.map((product) => (
                                 <ProductCart
-                                    key={index}
+                                    key={product.id}
+                                    id={product.id}
                                     name={product?.name}
                                     price={product?.price}
                                     quantity={product?.quantity}

@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import {
     handlerProductInCart,
-    handlerFillProductInCart
+    handlerAddProductInCart
 } from '../../../redux/actions/cart.action';
 
 const index = ({ name, price, id, img, userProduct }) => {
@@ -17,9 +17,7 @@ const index = ({ name, price, id, img, userProduct }) => {
                 handlerProductInCart({ name, price, quantity: 1, id, token })
             );
         } else {
-            dispatch(
-                handlerFillProductInCart({ name, price, quantity: 1, id })
-            );
+            dispatch(handlerAddProductInCart({ name, price, quantity: 1, id }));
         }
     };
 

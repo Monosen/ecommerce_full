@@ -9,7 +9,7 @@ import ImgProduct from '../../components/ProductInfo/ImgProduct';
 import Footer from '../../components/Custom/Footer';
 
 import {
-    handlerFillProductInCart,
+    handlerAddProductInCart,
     handlerProductInCart
 } from '../../redux/actions/cart.action';
 
@@ -51,7 +51,7 @@ const index = () => {
             );
         } else {
             dispatch(
-                handlerFillProductInCart({
+                handlerAddProductInCart({
                     name: product.name,
                     price: product.price,
                     quantity: 1,

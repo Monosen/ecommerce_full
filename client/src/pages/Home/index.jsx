@@ -37,16 +37,17 @@ const index = () => {
                 </div>
 
                 <div className="grid grid-cols-1 mx-auto mt-24 md:grid-cols-2 xl:grid-cols-3 justify-items-center gap-y-24">
-                    {allProducts?.map((product) => (
-                        <Product
-                            key={product.id}
-                            id={product.id}
-                            name={product.name}
-                            price={product.price}
-                            img={product.productImgs[0].imgPath}
-                            userProduct={product.user}
-                        />
-                    ))}
+                    {allProducts.length > 0 &&
+                        allProducts.map((product) => (
+                            <Product
+                                key={product?.id}
+                                id={product?.id}
+                                name={product?.name}
+                                price={product?.price}
+                                img={product?.productImgs[0].imgPath}
+                                userProduct={product?.user}
+                            />
+                        ))}
                 </div>
             </div>
 

@@ -1,13 +1,40 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
 
 import ModalEditProduct from '../ModalEditProduct';
+
+import {
+    handlerProductDelete,
+    handlerProductEdit
+} from '../../../redux/actions/product.action';
 
 const index = ({ name, price, id, category, description, quantity, img }) => {
     const [modal, setModal] = useState(false);
 
-    const handlerEditProduct = () => {
+    const dispatch = useDispatch();
+    const { token } = useSelector((store) => store.session);
+
+    const handlerOpenEditProduct = () => {
         setModal(!modal);
+    };
+
+    const handlerEditProduct = () => {
+        console.log('hola');
+        dispatch(
+            handlerProductEdit({
+                id,
+                name,
+                description,
+                price,
+                quantity,
+                category,
+                token
+            })
+        );
+    };
+
+    const handlerDeleteProduct = () => {
+        dispatch(handlerProductDelete({ id, token }));
     };
 
     return (
@@ -29,17 +56,17 @@ const index = ({ name, price, id, category, description, quantity, img }) => {
                         <div className="flex items-center w-full justify-evenly">
                             <button
                                 className="px-3 py-2 text-base text-white bg-red-400 border border-white rounded-lg hover:bg-white hover:border-red-400 hover:text-red-400"
-                                onClick={handlerEditProduct}
+                                onClick={handlerOpenEditProduct}
                             >
                                 Edit
                             </button>
 
-                            <Link
-                                className="px-3 py-2 text-red-400 border border-red-400 rounded-lg hover:bg-red-400 hover:border-white hover:text-white"
-                                to={`/product/${id}`}
+                            <button
+                                className="px-3 py-2 text-base text-red-400 border border-red-400 rounded-lg hover:bg-red-400 hover:border-white hover:text-white"
+                                onClick={handlerDeleteProduct}
                             >
                                 Delete
-                            </Link>
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -52,6 +79,7 @@ const index = ({ name, price, id, category, description, quantity, img }) => {
                     category={category}
                     description={description}
                     quantity={quantity}
+                    handlerOpenEditProduct={handlerOpenEditProduct}
                     handlerEditProduct={handlerEditProduct}
                 />
             )}

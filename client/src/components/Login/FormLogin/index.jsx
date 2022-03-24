@@ -3,7 +3,10 @@ import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { Formik } from 'formik';
 
-import { handlerLoginWithEmailAction } from '../../../redux/actions/login.action';
+import {
+    handlerLoginWithEmailAction,
+    handlerCreateAccount
+} from '../../../redux/actions/login.action';
 
 import UserImg from '../../../img/Login/undraw_profile_pic_ic5t.png';
 
@@ -33,8 +36,8 @@ const index = () => {
         }
 
         if (!signIn && signUp) {
-            console.log('create account');
-            // navigate('/');
+            dispatch(handlerCreateAccount({ name, email, password }));
+            navigate('/');
         }
     };
 

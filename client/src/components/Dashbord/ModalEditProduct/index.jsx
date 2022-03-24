@@ -3,22 +3,27 @@ import { Formik } from 'formik';
 
 import { IoMdClose } from 'react-icons/io';
 
-const index = ({
-    name,
-    price,
-    category,
-    quantity,
-    description,
-    handlerEditProduct
-}) => {
+const index = (props) => {
+    const {
+        name,
+        price,
+        category,
+        quantity,
+        description,
+        handlerEditProduct,
+        handlerOpenEditProduct
+    } = props;
+
     return (
-        <div className="fixed inset-0 z-50 flex items-center justify-center w-full min-h-screen bg-gray-500">
+        <div className="fixed inset-0 z-50 flex items-center justify-center w-full min-h-screen bg-[rgba(0,0,0,0.3)]">
             <div className="w-7/12 p-4 bg-white rounded-lg h-4/6">
                 <header className="flex justify-between">
-                    <p>edit produdct</p>
+                    <h5 className="mx-auto mb-8 text-2xl capitalize">
+                        edit produdct
+                    </h5>
                     <IoMdClose
                         className="text-3xl cursor-pointer"
-                        onClick={handlerEditProduct}
+                        onClick={handlerOpenEditProduct}
                     />
                 </header>
                 <div>
@@ -45,8 +50,8 @@ const index = ({
 
                             return errors;
                         }}
-                        onSubmit={() => {
-                            e.preventDefault();
+                        onSubmit={(value, { setSubmitting }) => {
+                            setSubmitting(false);
                         }}
                     >
                         {({
@@ -153,6 +158,7 @@ const index = ({
                                         placeholder="Description"
                                         cols="30"
                                         rows="5"
+                                        onChange={handleChange}
                                         value={values.description}
                                     ></textarea>
                                     <button
