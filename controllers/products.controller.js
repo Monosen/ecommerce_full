@@ -71,7 +71,7 @@ exports.createProduct = catchAsync(async (req, res, next) => {
     const imgsPromises = req.files?.productImgs.map(async (img, index) => {
         const imgName = `/img/products/${newProduct.id}-${currentUser.id}-${
             img.originalname
-        }-${index}-${Math.floor(Math.random() * 1000000 + 1)}`;
+        }-${index}-${Math.floor(Math.random() * 100 + 1)}`;
         const imgRef = ref(firebaseStorage, imgName);
 
         await uploadBytes(imgRef, img.buffer);
@@ -88,8 +88,6 @@ exports.createProduct = catchAsync(async (req, res, next) => {
     });
 
     await Promise.all(imgsPromises);
-
-    newProduct.imgPath = imgPath;
 
     res.status(201).json({ status: 'success', data: { newProduct } });
 });
@@ -135,7 +133,7 @@ exports.getUserProducts = catchAsync(async (req, res, next) => {
     });
 
     if (!products) {
-        return next(new AppError('user products not exits', 401));
+        return next(new AppError('user products not exits', 404));
     }
 
     res.status(200).json({

@@ -25,7 +25,7 @@ const index = () => {
         const handlerFetchData = async () => {
             try {
                 const { data } = await axios.get(
-                    `http://localhost:4000/api/v1/products/${id}`
+                    `${import.meta.env.VITE_APP_API_URL}/api/v1/products/${id}`
                 );
                 const { product } = data.data;
                 setLoader(false);

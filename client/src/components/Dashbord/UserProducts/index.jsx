@@ -12,7 +12,9 @@ const index = () => {
     useEffect(() => {
         const handlerAllProducts = async () => {
             const { data } = await axios.get(
-                `http://localhost:4000/api/v1/products/user-products`,
+                `${
+                    import.meta.env.VITE_APP_API_URL
+                }/api/v1/products/user-products`,
                 { headers: { Authorization: `Bearer ${token}` } }
             );
 
@@ -33,6 +35,9 @@ const index = () => {
                         name={product.name}
                         price={product.price}
                         id={product.id}
+                        category={product.category}
+                        quantity={product.quantity}
+                        description={product.description}
                         img={product.productImgs[0].imgPath}
                     />
                 ))}

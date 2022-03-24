@@ -9,7 +9,7 @@ import { RiShoppingCartLine, RiUser3Fill } from 'react-icons/ri';
 
 const index = () => {
     const [userNavbar, setUserNavbar] = useState(false);
-    const [cartNavbar, setCartNavbar] = useState(true);
+    const [cartNavbar, setCartNavbar] = useState(false);
 
     const { token } = useSelector((store) => store.session);
 
@@ -59,7 +59,7 @@ const index = () => {
                     <div className="flex justify-between w-14">
                         <div>
                             <RiShoppingCartLine
-                                className="text-lg"
+                                className="text-lg cursor-pointer"
                                 onClick={handlerCartNavBar}
                             />
                             <CartBody
@@ -70,7 +70,7 @@ const index = () => {
 
                         <div className="relative flex justify-center">
                             <RiUser3Fill
-                                className={`text-lg ${
+                                className={`text-lg cursor-pointer ${
                                     token ? 'text-red-500' : 'text-black'
                                 }`}
                                 onClick={handlerUserNavBar}

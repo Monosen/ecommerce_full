@@ -18,7 +18,9 @@ const index = ({ cartNavbar, handlerCartNavBar }) => {
         const handlerAllProductCart = async () => {
             if (token) {
                 const { data } = await axios.get(
-                    `http://localhost:4000/api/v1/orders/get-cart`,
+                    `${
+                        import.meta.env.VITE_APP_API_URL
+                    }/api/v1/orders/get-cart`,
                     {
                         headers: { Authorization: `Bearer ${token}` }
                     }

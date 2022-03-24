@@ -14,7 +14,10 @@ const index = ({ styles }) => {
         <div
             className={`flex items-center justify-center h-6 text-white bg-purple-400 rounded-md w-7 ${styles}`}
         >
-            <BsArrowLeft onClick={handlerHome} />
+            <BsArrowLeft
+                className="w-full h-full px-1 cursor-pointer"
+                onClick={handlerHome}
+            />
         </div>
     );
 };
