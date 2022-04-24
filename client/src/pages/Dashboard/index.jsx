@@ -1,40 +1,27 @@
 import React, { useState } from 'react';
 import { Outlet } from 'react-router-dom';
 
-import NavBarAdmin from '../../components/Dashbord/NavBarAdmin';
-import ButtomHome from '../../components/Custom/ButtonHome';
+import LayoutDashbord from '../../components/Layouts/Dashbord';
 
-import { BsArrowRight } from 'react-icons/bs';
+const Dashbord = () => {
+    const [hideNavbar, setHideNavbar] = useState(false);
 
-const index = () => {
-    const [statusMenu, setStatusMenu] = useState(true);
-
-    const handlerActiveMenu = () => {
-        setStatusMenu(!statusMenu);
+    const handlerstatusMenu = () => {
+        setHideNavbar(!hideNavbar);
     };
 
     return (
-        <>
-            <NavBarAdmin
-                statusMenu={statusMenu}
-                handlerActiveMenu={handlerActiveMenu}
-            />
-
-            <button
-                className="fixed flex items-center justify-center h-6 text-white bg-purple-400 rounded-md bottom-5 left-5 w-7"
-                onClick={handlerActiveMenu}
-            >
-                <BsArrowRight className="text-xl" />
-            </button>
-
-            <div className="pt-20 ml-48 mr-4">
-                <ButtomHome />
+        <LayoutDashbord
+            hideNavbar={hideNavbar}
+            handlerstatusMenu={handlerstatusMenu}
+        >
+            <div className={`pt-20 ${!hideNavbar ? 'ml-48' : 'ml-4'} mr-4`}>
                 <Outlet />
             </div>
 
             <div className="pt-20 ml-48 mr-4"></div>
-        </>
+        </LayoutDashbord>
     );
 };
 
-export default index;
+export default Dashbord;

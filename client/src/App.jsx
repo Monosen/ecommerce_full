@@ -17,7 +17,7 @@ import './App.css';
 
 const App = () => {
     const dispatch = useDispatch();
-    const { token } = useSelector((store) => store.session);
+    const { token, user } = useSelector((store) => store.session);
 
     useEffect(() => {
         const handlerLoginWithToken = async () => {
@@ -55,7 +55,12 @@ const App = () => {
         <BrowserRouter>
             <Routes>
                 <Route path="/" element={<Home />} />
-                <Route path="/login" element={<Login />} />
+                <Route
+                    path="/login"
+                    element={
+                        !token && !user ? <Login /> : <Navigate to={'/'} />
+                    }
+                />
                 <Route
                     path="/dashboard"
                     element={token ? <Dashboarg /> : <Navigate to={'/'} />}

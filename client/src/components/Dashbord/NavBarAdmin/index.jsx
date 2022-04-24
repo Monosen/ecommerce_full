@@ -4,12 +4,12 @@ import { useSelector } from 'react-redux';
 
 import UserImg from '../../../img/Login/undraw_profile_pic_ic5t.png';
 
-const index = ({ statusMenu, handlerActiveMenu }) => {
+const NavBarAdmin = ({ statusMenu }) => {
     const { user } = useSelector((store) => store.session);
 
     return (
         <nav
-            className={`fixed inset-y-0 z-50 w-48 text-white bg-purple-500 min-h-screen transition-all duration-500 ease-in-out py-5 ${
+            className={`fixed inset-y-0 z-50 w-48 text-white bg-red-400 min-h-screen transition-all duration-500 ease-in-out py-5 ${
                 statusMenu ? 'left-0' : '-left-full'
             }`}
         >
@@ -27,7 +27,7 @@ const index = ({ statusMenu, handlerActiveMenu }) => {
                 <NavLink
                     className={({ isActive }) =>
                         isActive
-                            ? 'capitalize my-3 border p-2 rounded-lg bg-white text-purple-700 border-purple-700'
+                            ? 'capitalize my-3 border p-2 rounded-lg bg-white text-red-700 border-red-700'
                             : 'capitalize my-3 p-2'
                     }
                     to={`products`}
@@ -38,27 +38,27 @@ const index = ({ statusMenu, handlerActiveMenu }) => {
                 <NavLink
                     className={({ isActive }) =>
                         isActive
-                            ? 'capitalize mb-3 border p-2 rounded-lg bg-white text-purple-700 border-purple-700'
-                            : 'capitalize mb-3 p-2'
+                            ? 'capitalize mb-3 border p-2 rounded-lg bg-white text-red-700 border-red-700 text-center'
+                            : 'capitalize mb-3 p-2 text-center'
                     }
                     to={`productsAdd`}
                 >
-                    add to product
+                    create new product
                 </NavLink>
 
                 <NavLink
                     className={({ isActive }) =>
                         isActive
-                            ? 'capitalize border p-2 rounded-lg bg-white text-purple-700 border-purple-700'
-                            : 'capitalize p-2'
+                            ? 'capitalize mb-3 border p-2 rounded-lg bg-white text-red-700 border-red-700'
+                            : 'capitalize mb-3 p-2'
                     }
-                    to={'/'}
+                    to={`/`}
                 >
-                    to product
+                    home
                 </NavLink>
             </div>
         </nav>
     );
 };
 
-export default index;
+export default NavBarAdmin;

@@ -20,7 +20,7 @@ const sendErrorProd = (err, req, res, next) => {
 	});
 };
 
-const handleDuplicateValues = err => {
+const handleDuplicateValues = () => {
 	return new AppError('Email is already taken', 400);
 };
 

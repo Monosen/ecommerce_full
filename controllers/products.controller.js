@@ -96,7 +96,7 @@ exports.updateProduct = catchAsync(async (req, res, next) => {
     const { product } = req;
 
     const filteredObj = filterObj(
-        req.body,
+        req.body.product,
         'name',
         'description',
         'price',

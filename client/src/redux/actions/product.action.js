@@ -1,13 +1,16 @@
 import axios from 'axios';
 
-export const handlerProductDelete = ({ id, token }) => {
+export const productEdit = (productData, id) => {
     return async () => {
         try {
-            await axios.delete(
+            await axios.patch(
                 `${import.meta.env.VITE_APP_API_URL}/api/v1/products/${id}`,
+                { product: productData },
                 {
                     headers: {
-                        Authorization: `Bearer ${token}`
+                        Authorization: `Bearer ${sessionStorage.getItem(
+                            'token'
+                        )}`
                     }
                 }
             );
@@ -17,26 +20,41 @@ export const handlerProductDelete = ({ id, token }) => {
     };
 };
 
-export const handlerProductEdit = ({
-    id,
-    name,
-    description,
-    price,
-    quantity,
-    category,
-    token
-}) => {
+export const productDelete = (id) => {
     return async () => {
         try {
             await axios.delete(
                 `${import.meta.env.VITE_APP_API_URL}/api/v1/products/${id}`,
-                { product: { name, description, price, quantity, category } },
                 {
                     headers: {
-                        Authorization: `Bearer ${token}`
+                        Authorization: `Bearer ${sessionStorage.getItem(
+                            'token'
+                        )}`
                     }
                 }
             );
+        } catch (error) {
+            console.log(error);
+        }
+    };
+};
+
+export const createNewProduct = (productData) => {
+    return async () => {
+        try {
+            const response = await axios.post(
+                `${import.meta.env.VITE_APP_API_URL}/api/v1/products`,
+                productData,
+                {
+                    headers: {
+                        Authorization: `Bearer ${sessionStorage.getItem(
+                            'token'
+                        )}`
+                    }
+                }
+            );
+
+            console.log(response);
         } catch (error) {
             console.log(error);
         }

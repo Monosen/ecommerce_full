@@ -13,7 +13,7 @@ import {
     handlerProductInCart
 } from '../../redux/actions/cart.action';
 
-const index = () => {
+const ProductInfo = () => {
     const [product, setProduct] = useState({});
     const [loader, setLoader] = useState(true);
 
@@ -138,4 +138,4 @@ const index = () => {
     );
 };
 
-export default index;
+export default ProductInfo;

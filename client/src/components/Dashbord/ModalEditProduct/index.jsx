@@ -1,9 +1,9 @@
-import React from 'react';
-import { Formik } from 'formik';
+import { Formik, Field, Form, ErrorMessage } from 'formik';
+import { number, object, string } from 'yup';
 
 import { IoMdClose } from 'react-icons/io';
 
-const index = (props) => {
+const ModalEditProduct = (props) => {
     const {
         name,
         price,
@@ -13,6 +13,14 @@ const index = (props) => {
         handlerEditProduct,
         handlerOpenEditProduct
     } = props;
+
+    const editProductSchema = object({
+        name: string().required('Name is required'),
+        price: number().required('Price is required'),
+        quantity: number().required('Quantity is required'),
+        category: string().required('Category is required'),
+        description: string().required('Description is required')
+    });
 
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center w-full min-h-screen bg-[rgba(0,0,0,0.3)]">
@@ -26,155 +34,114 @@ const index = (props) => {
                         onClick={handlerOpenEditProduct}
                     />
                 </header>
-                <div>
-                    <Formik
-                        initialValues={{
-                            name,
-                            price,
-                            quantity,
-                            category,
-                            description
-                        }}
-                        validate={(value) => {
-                            let errors = {};
 
-                            // name validation
-                            if (!value.name) {
-                                errors.name = 'Please enter a name';
-                            } else if (
-                                !/^[a-zA-ZÀ-ÿ\s]{1,40}$/.test(value.name)
-                            ) {
-                                errors.name =
-                                    'The name can only contain letters and spaces';
-                            }
-
-                            return errors;
-                        }}
-                        onSubmit={(value, { setSubmitting }) => {
-                            setSubmitting(false);
-                        }}
-                    >
-                        {({
-                            values,
-                            errors,
-                            handlerSubmit,
-                            handleChange,
-                            handleBlur
-                        }) => (
-                            <form action="" onSubmit={handlerSubmit}>
-                                <div className="flex flex-col w-9/12 mx-auto gap-y-4">
-                                    <div className="flex gap-x-7">
-                                        <div className="w-full">
-                                            <label>Name</label>
-                                            <input
-                                                className={`block px-2 py-3 border rounded-lg w-full ${
-                                                    errors.name &&
-                                                    'text-red-500 border-red-500 placeholder-red-500'
-                                                }`}
-                                                type="text"
-                                                id="name"
-                                                name="name"
-                                                placeholder="Name"
-                                                value={values.name}
-                                                onChange={handleChange}
-                                                onBlur={handleBlur}
-                                            />
-                                            {errors?.name && (
-                                                <p className="text-red-600 capitalize">
-                                                    {errors.name}
-                                                </p>
-                                            )}
-                                        </div>
-                                        <div className="w-full">
-                                            <label>Price</label>
-                                            <input
-                                                className={`block px-2 py-3 border rounded-lg w-full ${
-                                                    errors.price &&
-                                                    'text-red-500 border-red-500 placeholder-red-500'
-                                                }`}
-                                                type="text"
-                                                id="price"
-                                                name="price"
-                                                placeholder="Price"
-                                                value={values.price}
-                                                onChange={handleChange}
-                                                onBlur={handleBlur}
-                                            />
-                                            {errors?.price && (
-                                                <p className="text-red-600 capitalize">
-                                                    {errors.price}
-                                                </p>
-                                            )}
-                                        </div>
+                <Formik
+                    initialValues={{
+                        name,
+                        price,
+                        quantity,
+                        category,
+                        description
+                    }}
+                    validationSchema={editProductSchema}
+                    onSubmit={(values) => handlerEditProduct(values)}
+                >
+                    {({ errors }) => (
+                        <Form>
+                            <div className="flex flex-col w-9/12 mx-auto gap-y-4">
+                                <div className="flex gap-x-7">
+                                    <div className="w-full">
+                                        <label>Name</label>
+                                        <Field
+                                            className={`block px-2 py-3 border rounded-lg w-full ${
+                                                errors.name &&
+                                                'text-red-500 border-red-500 placeholder-red-500'
+                                            }`}
+                                            type="text"
+                                            name="name"
+                                            placeholder="Name"
+                                        />
+                                        <ErrorMessage
+                                            name="name"
+                                            className="text-red-600 capitalize"
+                                        />
                                     </div>
-                                    <div className="flex gap-7">
-                                        <div className="w-full">
-                                            <label>Quantity</label>
-                                            <input
-                                                className={`block px-2 py-3 border rounded-lg w-full ${
-                                                    errors.quantity &&
-                                                    'text-red-500 border-red-500 placeholder-red-500'
-                                                }`}
-                                                type="number"
-                                                id="quantity"
-                                                name="quantity"
-                                                min={1}
-                                                placeholder="Quantity"
-                                                value={values.quantity}
-                                                onChange={handleChange}
-                                                onBlur={handleBlur}
-                                            />
-                                            {errors?.quantity && (
-                                                <p className="text-red-600 capitalize">
-                                                    {errors.quantity}
-                                                </p>
-                                            )}
-                                        </div>
-                                        <div className="w-full">
-                                            <label>Category</label>
-                                            <input
-                                                className={`block px-2 py-3 border rounded-lg w-full ${
-                                                    errors.category &&
-                                                    'text-red-500 border-red-500 placeholder-red-500'
-                                                }`}
-                                                type="text"
-                                                id="categoty"
-                                                name="category"
-                                                placeholder="Category"
-                                                value={values.category}
-                                                onChange={handleChange}
-                                                onBlur={handleBlur}
-                                            />
-                                            {errors?.category && (
-                                                <p className="text-red-600 capitalize">
-                                                    {errors.category}
-                                                </p>
-                                            )}
-                                        </div>
+                                    <div className="w-full">
+                                        <label>Price</label>
+                                        <Field
+                                            className={`block px-2 py-3 border rounded-lg w-full ${
+                                                errors.price &&
+                                                'text-red-500 border-red-500 placeholder-red-500'
+                                            }`}
+                                            type="number"
+                                            name="price"
+                                            placeholder="Price"
+                                        />
+                                        <ErrorMessage
+                                            name="price"
+                                            className="text-red-600 capitalize"
+                                        />
                                     </div>
-
-                                    <textarea
-                                        className="p-2 mt-5 border rounded-lg"
-                                        placeholder="Description"
-                                        cols="30"
-                                        rows="5"
-                                        onChange={handleChange}
-                                        value={values.description}
-                                    ></textarea>
-                                    <button
-                                        type="submit"
-                                        className="px-2 py-3 text-base bg-white border rounded-lg"
-                                    >
-                                        Submit
-                                    </button>
                                 </div>
-                            </form>
-                        )}
-                    </Formik>
-                </div>
+                                <div className="flex gap-7">
+                                    <div className="w-full">
+                                        <label>Quantity</label>
+                                        <Field
+                                            className={`block px-2 py-3 border rounded-lg w-full ${
+                                                errors.quantity &&
+                                                'text-red-500 border-red-500 placeholder-red-500'
+                                            }`}
+                                            type="number"
+                                            name="quantity"
+                                            min={1}
+                                        />
+                                        <ErrorMessage
+                                            name="quantity"
+                                            className="text-red-600 capitalize"
+                                        />
+                                    </div>
+                                    <div className="w-full">
+                                        <label>Category</label>
+                                        <Field
+                                            className={`block px-2 py-3 border rounded-lg w-full ${
+                                                errors.category &&
+                                                'text-red-500 border-red-500 placeholder-red-500'
+                                            }`}
+                                            type="text"
+                                            name="category"
+                                            placeholder="Category"
+                                        />
+                                        <ErrorMessage
+                                            name="category"
+                                            className="text-red-600 capitalize"
+                                        />
+                                    </div>
+                                </div>
+                                <Field
+                                    className="p-2 mt-5 border rounded-lg"
+                                    placeholder="Description"
+                                    cols="30"
+                                    rows="5"
+                                    name="description"
+                                    as="textarea"
+                                />
+                                <ErrorMessage
+                                    name="description"
+                                    className="text-red-600 capitalize"
+                                />
+                                <button
+                                    type="submit"
+                                    className="px-2 py-3 text-base bg-white border rounded-lg"
+                                >
+                                    Submit
+                                </button>
+                            </div>
+                        </Form>
+                    )}
+                </Formik>
             </div>
         </div>
     );
 };
 
-export default index;
+export default ModalEditProduct;

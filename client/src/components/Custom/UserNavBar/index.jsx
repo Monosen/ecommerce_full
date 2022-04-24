@@ -1,7 +1,8 @@
-import React from 'react';
+import { useSelector } from 'react-redux';
 import { NavLink, useNavigate } from 'react-router-dom';
 
-const index = () => {
+const UserNavBar = () => {
+    const { token, user } = useSelector((store) => store.session);
     const navigate = useNavigate();
 
     const handlerExitAccount = () => {
@@ -11,37 +12,27 @@ const index = () => {
 
     return (
         <nav className="absolute flex flex-col justify-center p-2 bg-white border rounded-lg top-9 w-28">
-            <NavLink
-                className={({ isActive }) =>
-                    isActive
-                        ? 'bg-pink-300 text-white text-lg'
-                        : 'text-black text-lg'
-                }
-                to={`/login`}
-            >
-                Login
-            </NavLink>
+            {!token && !user && (
+                <NavLink
+                    className={({ isActive }) =>
+                        isActive
+                            ? 'bg-pink-300 text-white text-lg px-2'
+                            : 'text-black text-lg hover:text-white hover:bg-red-400 px-2 rounded-lg'
+                    }
+                    to={`/login`}
+                >
+                    Login
+                </NavLink>
+            )}
 
-            <NavLink
-                className={({ isActive }) =>
-                    isActive ? 'bg-pink-300 text-white' : 'text-black'
-                }
-                to={`/`}
-            >
-                Loga Up
-            </NavLink>
-
-            <NavLink
-                className={({ isActive }) =>
-                    isActive ? 'bg-pink-300 text-white' : 'text-black'
-                }
-                to={`/`}
+            <p
+                className="px-2 mt-1 text-lg rounded-lg hover:text-white hover:bg-red-400"
                 onClick={handlerExitAccount}
             >
                 Exit
-            </NavLink>
+            </p>
         </nav>
     );
 };
 
-export default index;
+export default UserNavBar;

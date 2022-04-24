@@ -17,8 +17,11 @@ export const handlerLoginWithEmailAction = ({ email, password }) => {
             sessionStorage.setItem('token', token);
 
             dispatch(handlerFillUserInfoAction({ user, token }));
+
+            return true;
         } catch (error) {
             console.log(error);
+            return false;
         }
     };
 };
@@ -41,9 +44,10 @@ export const handlerCreateAccount = (infoUser) => {
             const { email } = data.data.user;
             const { password } = infoUser;
 
-            dispatch(handlerLoginWithEmailAction({ email, password }));
+            return dispatch(handlerLoginWithEmailAction({ email, password }));
         } catch (error) {
             console.log(error);
+            return false;
         }
     };
 };

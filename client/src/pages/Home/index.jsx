@@ -7,7 +7,7 @@ import Hero from '../../components/Home/Hero';
 import Footer from '../../components/Custom/Footer';
 import ButtonTop from '../../components/Custom/ButtonTop';
 
-const index = () => {
+const Home = () => {
     const [allProducts, setAllProducts] = useState([]);
 
     useEffect(() => {
@@ -56,4 +56,4 @@ const index = () => {
     );
 };
 
-export default index;
+export default Home;

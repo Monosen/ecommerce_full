@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { Formik } from 'formik';
+import { Formik, Form, Field, ErrorMessage } from 'formik';
+import { object, string } from 'yup';
 
 import {
     handlerLoginWithEmailAction,
@@ -10,7 +11,7 @@ import {
 
 import UserImg from '../../../img/Login/undraw_profile_pic_ic5t.png';
 
-const index = () => {
+const FormLogin = ({ handlerLoader }) => {
     const [signIn, setSignIn] = useState(true);
     const [signUp, setSignUp] = useState(false);
 
@@ -27,56 +28,76 @@ const index = () => {
         setSignUp(true);
     };
 
-    const handlerLogin = (e) => {
-        const { name, email, password } = e;
+    const handlerLogin = async (values) => {
+        handlerLoader();
 
-        if (signIn && !signUp) {
-            dispatch(handlerLoginWithEmailAction({ email, password }));
-            navigate('/');
+        const { email, password } = values;
+
+        const user = await dispatch(
+            handlerLoginWithEmailAction({ email, password })
+        );
+
+        if (user) {
+            // navigate('/');
+            handlerLoader();
         }
 
-        if (!signIn && signUp) {
-            dispatch(handlerCreateAccount({ name, email, password }));
-            navigate('/');
+        if (!user) {
+            handlerLoader();
         }
     };
 
+    const createNewAccount = async (values) => {
+        handlerLoader();
+
+        const { name, email, password } = values;
+
+        const user = await dispatch(
+            handlerCreateAccount({ name, email, password })
+        );
+
+        if (user) {
+            navigate('/');
+            handlerLoader();
+        }
+
+        if (!user) {
+            handlerLoader();
+        }
+    };
+
+    const signInSchema = object({
+        email: string().email('Invalid email').required('Required'),
+        password: string().required('Required')
+    });
+
+    const signUpSchema = object({
+        name: string()
+            .min(1, 'name must have at least 1 character')
+            .required('Required'),
+        email: string().email('Invalid email').required('Required'),
+        password: string()
+            .min(8, 'Password must have at least 6 characters')
+            .max(20, 'Password must have a maximum of 20 characters')
+            .required('Required')
+    });
+
     return (
         <Formik
-            initialValues={{ name: '', email: '', password: '' }}
-            validate={(value) => {
-                let errors = {};
-
-                if (!signIn) {
-                    // name validation
-                    if (!value.name) {
-                        errors.name = 'Please enter a name';
-                    } else if (!/^[a-zA-ZÀ-ÿ\s]{1,40}$/.test(value.name)) {
-                        errors.name =
-                            'The name can only contain letters and spaces';
-                    }
-                }
-
-                // email validation
-                if (!value.email) {
-                    errors.email = 'Please enter a mail';
-                } // else if (
-                //     !/^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/.test(
-                //         value.email
-                //     )
-                // ) {
-                //     errors.email =
-                //         'Mail can only contain letters, numbers, periods, hyphens and underscores';
-                // }
-
-                return errors;
-            }}
-            onSubmit={(e) => handlerLogin(e)}
+            initialValues={
+                signIn
+                    ? { email: '', password: '' }
+                    : { name: '', email: '', password: '' }
+            }
+            validationSchema={signIn ? signInSchema : signUpSchema}
+            onSubmit={(values) =>
+                signIn ? handlerLogin(values) : createNewAccount(values)
+            }
         >
-            {({ values, errors, handleSubmit, handleChange, handleBlur }) => (
-                <form action="" onSubmit={handleSubmit}>
+            {({ errors }) => (
+                <Form>
                     <div className="flex flex-col items-center justify-center">
-                        <header className="flex flex-col items-center mx-auto mb-5 text-black">
+                        <div className="flex flex-col items-center mx-auto mb-5 text-black">
                             <img
                                 className="w-40 mb-5"
                                 src={UserImg}
@@ -84,89 +105,69 @@ const index = () => {
                             />
                             <section className="grid grid-cols-2 gap-x-2 justify-items-center">
                                 <button
-                                    className={`${signIn && ''}`}
+                                    className={`${signIn && 'text-pink-500'}`}
                                     onClick={handlerSignIn}
                                     type="button"
                                 >
                                     Login
                                 </button>
                                 <button
-                                    className={`${signUp && ''}`}
+                                    className={`${signUp && 'text-pink-500'}`}
                                     onClick={handlerSignUp}
                                     type="button"
                                 >
                                     Sing Up
                                 </button>
                             </section>
-                        </header>
-
+                        </div>
                         {signUp && (
                             <div className="w-full mb-3">
-                                <input
+                                <Field
                                     className={`w-full px-3 py-2.5 border-b ${
                                         errors.name
                                             ? 'border-b-red-500'
                                             : 'border-b-black'
                                     } focus:outline-none`}
                                     type="text"
-                                    id="name"
                                     name="name"
-                                    placeholder="Name"
-                                    value={values.name}
-                                    onChange={handleChange}
-                                    onBlur={handleBlur}
+                                    placeholder="name"
                                 />
-                                {errors?.name && (
-                                    <p className="pt-2 text-red-600 capitalize">
-                                        {errors.name}
-                                    </p>
-                                )}
+                                <ErrorMessage name="name" />
                             </div>
                         )}
                         <div className="w-full mb-3">
-                            <input
+                            <Field
                                 className={`w-full px-3 py-2.5 border-b ${
                                     errors.email
                                         ? 'border-b-red-500'
                                         : 'border-b-black'
                                 } focus:outline-none`}
                                 type="text"
-                                id="email"
                                 name="email"
                                 placeholder="Email"
-                                value={values.email}
-                                onChange={handleChange}
-                                onBlur={handleBlur}
                             />
-                            {errors?.email && (
-                                <p className="pt-2 text-red-600 capitalize">
-                                    {errors.email}
-                                </p>
-                            )}
+                            <ErrorMessage name="email" />
                         </div>
                         <div className="w-full mb-3">
-                            <input
+                            <Field
                                 className="w-full px-3 py-2.5 mt-2 border-b border-b-black focus:outline-none"
                                 type="password"
-                                id="password"
                                 name="password"
                                 placeholder="Password"
-                                value={values.password}
-                                onChange={handleChange}
-                                onBlur={handleBlur}
                             />
+                            <ErrorMessage name="password" />
                         </div>
                         <button
-                            className="w-5/12 py-2 mt-5 text-xl text-white capitalize bg-purple-800"
+                            className="w-5/12 py-2 mt-5 text-xl text-white capitalize bg-red-400"
                             type="submit"
                         >
-                            {signIn ? 'Log In' : 'Sign Up'}
+                            Log In
                         </button>
                     </div>
-                </form>
+                </Form>
             )}
         </Formik>
     );
 };
 
-export default index;
+export default FormLogin;

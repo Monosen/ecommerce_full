@@ -1,40 +1,36 @@
 import React, { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 
 import ModalEditProduct from '../ModalEditProduct';
 
 import {
-    handlerProductDelete,
-    handlerProductEdit
+    productDelete,
+    productEdit
 } from '../../../redux/actions/product.action';
 
-const index = ({ name, price, id, category, description, quantity, img }) => {
+const ItemProduct = ({
+    name,
+    price,
+    id,
+    category,
+    description,
+    quantity,
+    img
+}) => {
     const [modal, setModal] = useState(false);
 
     const dispatch = useDispatch();
-    const { token } = useSelector((store) => store.session);
 
     const handlerOpenEditProduct = () => {
         setModal(!modal);
     };
 
-    const handlerEditProduct = () => {
-        console.log('hola');
-        dispatch(
-            handlerProductEdit({
-                id,
-                name,
-                description,
-                price,
-                quantity,
-                category,
-                token
-            })
-        );
+    const handlerEditProduct = (values) => {
+        dispatch(productEdit(values, id));
     };
 
     const handlerDeleteProduct = () => {
-        dispatch(handlerProductDelete({ id, token }));
+        dispatch(productDelete(id));
     };
 
     return (
@@ -87,4 +83,4 @@ const index = ({ name, price, id, category, description, quantity, img }) => {
     );
 };
 
-export default index;
+export default ItemProduct;

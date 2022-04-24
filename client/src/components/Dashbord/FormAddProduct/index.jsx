@@ -1,8 +1,42 @@
-import React from 'react';
-import { Formik } from 'formik';
+import { Formik, Form, Field, ErrorMessage } from 'formik';
+import { useRef } from 'react';
+import { number, object, string, mixed } from 'yup';
+import { useDispatch } from 'react-redux';
+import { createNewProduct } from '../../../redux/actions/product.action';
 
-const index = () => {
-    const handlerCreateProduct = () => {};
+const FormAddProduct = () => {
+    const dispatch = useDispatch();
+    const fileRef = useRef(null);
+
+    const handlerCreateProduct = (values) => {
+        // console.log(values);
+        const { name, price, quantity, category, description, file } = values;
+        const productData = new FormData();
+        productData.append('name', name);
+        productData.append('description', description);
+        productData.append('price', price);
+        productData.append('quantity', quantity);
+        productData.append('category', category);
+
+        let i = 0;
+        for (const key in file) {
+            if (i < 3) {
+                productData.append('productImgs', file[key]);
+                i++;
+            }
+        }
+
+        dispatch(createNewProduct(productData));
+    };
+
+    const addToProductSchema = object({
+        name: string().required('Name is required'),
+        price: number().min(1, 'min 1').required('Price is required'),
+        quantity: number().required('Quantity is required'),
+        category: string().required('Category is required'),
+        description: string().required('Description is required'),
+        file: mixed().required('File is required')
+    });
 
     return (
         <div className="fixed inset-0 z-10 flex items-center justify-center w-full min-h-screen">
@@ -12,153 +46,127 @@ const index = () => {
                         edit produdct
                     </h5>
                 </header>
-                <div>
-                    <Formik
-                        initialValues={{
-                            name: '',
-                            price: '',
-                            quantity: 0,
-                            category: '',
-                            description: ''
-                        }}
-                        validate={(value) => {
-                            let errors = {};
-
-                            // name validation
-                            if (!value.name) {
-                                errors.name = 'Please enter a name';
-                            } else if (
-                                !/^[a-zA-ZÀ-ÿ\s]{1,40}$/.test(value.name)
-                            ) {
-                                errors.name =
-                                    'The name can only contain letters and spaces';
-                            }
-
-                            return errors;
-                        }}
-                        onSubmit={() => {}}
-                    >
-                        {({
-                            values,
-                            errors,
-                            handlerSubmit,
-                            handleChange,
-                            handleBlur
-                        }) => (
-                            <form action="" onSubmit={handlerSubmit}>
-                                <div className="flex flex-col w-9/12 mx-auto gap-y-4">
-                                    <div className="flex gap-x-7">
-                                        <div className="w-full">
-                                            <label>Name</label>
-                                            <input
-                                                className={`block px-2 py-3 border rounded-lg w-full ${
-                                                    errors.name &&
-                                                    'text-red-500 border-red-500 placeholder-red-500'
-                                                }`}
-                                                type="text"
-                                                id="name"
-                                                name="name"
-                                                placeholder="Name"
-                                                value={values.name}
-                                                onChange={handleChange}
-                                                onBlur={handleBlur}
-                                            />
-                                            {errors?.name && (
-                                                <p className="text-red-600 capitalize">
-                                                    {errors.name}
-                                                </p>
-                                            )}
-                                        </div>
-                                        <div className="w-full">
-                                            <label>Price</label>
-                                            <input
-                                                className={`block px-2 py-3 border rounded-lg w-full ${
-                                                    errors.price &&
-                                                    'text-red-500 border-red-500 placeholder-red-500'
-                                                }`}
-                                                type="text"
-                                                id="price"
-                                                name="price"
-                                                placeholder="Price"
-                                                value={values.price}
-                                                onChange={handleChange}
-                                                onBlur={handleBlur}
-                                            />
-                                            {errors?.price && (
-                                                <p className="text-red-600 capitalize">
-                                                    {errors.price}
-                                                </p>
-                                            )}
-                                        </div>
+                <Formik
+                    initialValues={{
+                        name: '',
+                        price: '',
+                        quantity: '',
+                        category: '',
+                        description: '',
+                        file: null
+                    }}
+                    validationSchema={addToProductSchema}
+                    onSubmit={(values) => handlerCreateProduct(values)}
+                >
+                    {({ errors, setFieldValue }) => (
+                        <Form>
+                            <div className="flex flex-col w-9/12 mx-auto gap-y-4">
+                                <div className="flex gap-x-7">
+                                    <div className="w-full">
+                                        <label>Name</label>
+                                        <Field
+                                            className={`block px-2 py-3 border rounded-lg w-full ${
+                                                errors.name &&
+                                                'text-red-500 border-red-500 placeholder-red-500'
+                                            }`}
+                                            type="text"
+                                            name="name"
+                                            placeholder="Name"
+                                        />
+                                        <ErrorMessage
+                                            name="name"
+                                            className="text-red-600 capitalize"
+                                        />
                                     </div>
-                                    <div className="flex gap-7">
-                                        <div className="w-full">
-                                            <label>Quantity</label>
-                                            <input
-                                                className={`block px-2 py-3 border rounded-lg w-full ${
-                                                    errors.quantity &&
-                                                    'text-red-500 border-red-500 placeholder-red-500'
-                                                }`}
-                                                type="number"
-                                                id="quantity"
-                                                name="quantity"
-                                                min={1}
-                                                placeholder="Quantity"
-                                                value={values.quantity}
-                                                onChange={handleChange}
-                                                onBlur={handleBlur}
-                                            />
-                                            {errors?.quantity && (
-                                                <p className="text-red-600 capitalize">
-                                                    {errors.quantity}
-                                                </p>
-                                            )}
-                                        </div>
-                                        <div className="w-full">
-                                            <label>Category</label>
-                                            <input
-                                                className={`block px-2 py-3 border rounded-lg w-full ${
-                                                    errors.category &&
-                                                    'text-red-500 border-red-500 placeholder-red-500'
-                                                }`}
-                                                type="text"
-                                                id="categoty"
-                                                name="category"
-                                                placeholder="Category"
-                                                value={values.category}
-                                                onChange={handleChange}
-                                                onBlur={handleBlur}
-                                            />
-                                            {errors?.category && (
-                                                <p className="text-red-600 capitalize">
-                                                    {errors.category}
-                                                </p>
-                                            )}
-                                        </div>
+                                    <div className="w-full">
+                                        <label>Price</label>
+                                        <Field
+                                            className={`block px-2 py-3 border rounded-lg w-full ${
+                                                errors.price &&
+                                                'text-red-500 border-red-500 placeholder-red-500'
+                                            }`}
+                                            type="number"
+                                            name="price"
+                                            placeholder="Price"
+                                        />
+                                        <ErrorMessage
+                                            name="price"
+                                            className="text-red-600 capitalize"
+                                        />
                                     </div>
-
-                                    <textarea
-                                        className="p-2 mt-5 border rounded-lg"
-                                        placeholder="Description"
-                                        cols="30"
-                                        rows="5"
-                                        onChange={handleChange}
-                                        value={values.description}
-                                    ></textarea>
-                                    <button
-                                        type="submit"
-                                        className="px-2 py-3 text-base bg-white border rounded-lg"
-                                    >
-                                        Submit
-                                    </button>
                                 </div>
-                            </form>
-                        )}
-                    </Formik>
-                </div>
+                                <div className="flex gap-7">
+                                    <div className="w-full">
+                                        <label>Quantity</label>
+                                        <Field
+                                            className={`block px-2 py-3 border rounded-lg w-full ${
+                                                errors.quantity &&
+                                                'text-red-500 border-red-500 placeholder-red-500'
+                                            }`}
+                                            type="number"
+                                            name="quantity"
+                                            min={1}
+                                            placeholder="Quantity"
+                                        />
+                                        <ErrorMessage
+                                            name="quantity"
+                                            className="text-red-600 capitalize"
+                                        />
+                                    </div>
+                                    <div className="w-full">
+                                        <label>Category</label>
+                                        <Field
+                                            className={`block px-2 py-3 border rounded-lg w-full ${
+                                                errors.category &&
+                                                'text-red-500 border-red-500 placeholder-red-500'
+                                            }`}
+                                            type="text"
+                                            id="categoty"
+                                            name="category"
+                                            placeholder="Category"
+                                        />
+                                        <ErrorMessage
+                                            name="category"
+                                            className="text-red-600 capitalize"
+                                        />
+                                    </div>
+                                </div>
+                                <Field
+                                    className="p-2 mt-5 border rounded-lg"
+                                    placeholder="Description"
+                                    name="description"
+                                    cols="30"
+                                    rows="5"
+                                    as="textarea"
+                                />
+                                <input
+                                    ref={fileRef}
+                                    type="file"
+                                    accept="image/*"
+                                    multiple
+                                    onChange={(event) => {
+                                        setFieldValue(
+                                            'file',
+                                            event.currentTarget.files
+                                        );
+                                    }}
+                                />
+                                <button
+                                    type="submit"
+                                    // onClick={() => {
+                                    //     fileRef.current.click();
+                                    // }}
+                                    className="px-2 py-3 text-base bg-white border rounded-lg"
+                                >
+                                    Submit
+                                </button>
+                            </div>
+                        </Form>
+                    )}
+                </Formik>
             </div>
         </div>
     );
 };
 
-export default index;
+export default FormAddProduct;
