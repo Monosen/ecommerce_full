@@ -10,7 +10,7 @@
         "start": "node server.js",
         "client:install": "cd client && npm install",
         "client:build": "cd client && npm run build",
-        "heroku-postbuild": "npm run client:install && npm run client:build",
+        "heroku-igno-postbuild": "npm run client:install && npm run client:build",
         "client:start": "cd client && npm run dev",
         "server:start": "nodemon server.js",
         "dev": "npm-run-all --parallel server:start client:start"
