@@ -40,14 +40,14 @@ app.use(express.static(path.join(__dirname, 'client', 'build')));
 app.use(helmet());
 
 // Development logging
-if (process.env.NODE_ENV === 'development') app.use(morgan('dev'));
+if (process.env.RAILWAY_ENVIRONMENT === 'development') app.use(morgan('dev'));
 else app.use(morgan('combined'));
 
 // Limit requests from same API
 const limiter = rateLimit({
-	max: 1000,
-	windowMs: 60 * 60 * 1000, // 1 hour
-	message: 'Too many requests from this IP, please try again in an hour!',
+    max: 1000,
+    windowMs: 60 * 60 * 1000, // 1 hour
+    message: 'Too many requests from this IP, please try again in an hour!'
 });
 app.use('/api', limiter);
 
@@ -70,7 +70,7 @@ app.use('/api/v1/orders', ordersRouter);
 app.use('/', viewsRouter);
 
 app.all('*', (req, res, next) => {
-	next(new AppError(`Can't find ${req.originalUrl} on this server`, 404));
+    next(new AppError(`Can't find ${req.originalUrl} on this server`, 404));
 });
 
 app.use(globalErrorHandler);
