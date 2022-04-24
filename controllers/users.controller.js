@@ -34,7 +34,7 @@ exports.loginUser = catchAsync(async (req, res, next) => {
     // 	),
     // };
     // // M E R N
-    // if (process.env.RAILWAY_ENVIRONMENT === "production") {
+    // if (process.env.NODE_ENV === "production") {
     // 	cookieOptions.secure = true;
     // 	cookieOptions.httpOnly = true;
     // }

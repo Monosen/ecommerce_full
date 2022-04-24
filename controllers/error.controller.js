@@ -37,9 +37,9 @@ const globalErrorHandler = (err, req, res, next) => {
     err.status = err.status || 'error';
 
     // Validate if its production environment
-    if (process.env.RAILWAY_ENVIRONMENT === 'development') {
+    if (process.env.NODE_ENV === 'development') {
         sendErrorDev(err, req, res, next);
-    } else if (process.env.RAILWAY_ENVIRONMENT === 'production') {
+    } else if (process.env.NODE_ENV === 'production') {
         let error = { ...err };
 
         // Catch known errors

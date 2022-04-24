@@ -12,7 +12,7 @@ class Email {
     }
 
     createTransport() {
-        if (process.env.RAILWAY_ENVIRONMENT === 'production') {
+        if (process.env.NODE_ENV === 'production') {
             return nodemailer.createTransport({
                 service: 'SendGrid',
                 auth: {

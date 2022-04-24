@@ -40,7 +40,7 @@ app.use(express.static(path.join(__dirname, 'client', 'build')));
 app.use(helmet());
 
 // Development logging
-if (process.env.RAILWAY_ENVIRONMENT === 'development') app.use(morgan('dev'));
+if (process.env.NODE_ENV === 'development') app.use(morgan('dev'));
 else app.use(morgan('combined'));
 
 // Limit requests from same API
