@@ -66,6 +66,7 @@ app.use(compression());
 app.use('/api/v1/users', userRouter);
 app.use('/api/v1/products', productsRouter);
 app.use('/api/v1/orders', ordersRouter);
+
 // http://localhost:4000/ -> REACT
 app.use('/', viewsRouter);
 
