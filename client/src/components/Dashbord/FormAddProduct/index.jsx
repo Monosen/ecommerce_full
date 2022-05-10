@@ -1,6 +1,7 @@
-import { Formik, Form, Field, ErrorMessage } from 'formik';
 import { useRef } from 'react';
-import { number, object, string, mixed } from 'yup';
+import { Formik, Form, Field, ErrorMessage } from 'formik';
+import * as yup from 'yup';
+
 import { useDispatch } from 'react-redux';
 import { createNewProduct } from '../../../redux/actions/product.action';
 
@@ -29,13 +30,13 @@ const FormAddProduct = () => {
         dispatch(createNewProduct(productData));
     };
 
-    const addToProductSchema = object({
-        name: string().required('Name is required'),
-        price: number().min(1, 'min 1').required('Price is required'),
-        quantity: number().required('Quantity is required'),
-        category: string().required('Category is required'),
-        description: string().required('Description is required'),
-        file: mixed().required('File is required')
+    const addToProductSchema = yup.object({
+        name: yup.string().required('Name is required'),
+        price: yup.number().min(1, 'min 1').required('Price is required'),
+        quantity: yup.number().required('Quantity is required'),
+        category: yup.string().required('Category is required'),
+        description: yup.string().required('Description is required'),
+        file: yup.mixed().required('File is required')
     });
 
     return (
