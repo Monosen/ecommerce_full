@@ -34,7 +34,7 @@ app.use(cors()); //Access-Control-Allow-Origin *
 app.options('*', cors());
 
 // Serving static files
-app.use(express.static(path.join(__dirname, 'client', 'build')));
+app.use(express.static('../app/dist'));
 
 // Set security HTTP headers
 app.use(helmet());
