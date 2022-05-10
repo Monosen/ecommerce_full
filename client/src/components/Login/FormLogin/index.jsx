@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
-import { object, string } from 'yup';
+import * as yup from 'yup';
 
 import {
     handlerLoginWithEmailAction,
@@ -66,17 +66,19 @@ const FormLogin = ({ handlerLoader }) => {
         }
     };
 
-    const signInSchema = object({
-        email: string().email('Invalid email').required('Required'),
-        password: string().required('Required')
+    const signInSchema = yup.object({
+        email: yup.string().email('Invalid email').required('Required'),
+        password: yup.string().required('Required')
     });
 
-    const signUpSchema = object({
-        name: string()
+    const signUpSchema = yup.object({
+        name: yup
+            .string()
             .min(1, 'name must have at least 1 character')
             .required('Required'),
-        email: string().email('Invalid email').required('Required'),
-        password: string()
+        email: yup.string().email('Invalid email').required('Required'),
+        password: yup
+            .string()
             .min(8, 'Password must have at least 6 characters')
             .max(20, 'Password must have a maximum of 20 characters')
             .required('Required')

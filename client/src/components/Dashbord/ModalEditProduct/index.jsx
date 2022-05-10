@@ -1,5 +1,5 @@
 import { Formik, Field, Form, ErrorMessage } from 'formik';
-import { number, object, string } from 'yup';
+import * as yup from 'yup';
 
 import { IoMdClose } from 'react-icons/io';
 
@@ -14,12 +14,12 @@ const ModalEditProduct = (props) => {
         handlerOpenEditProduct
     } = props;
 
-    const editProductSchema = object({
-        name: string().required('Name is required'),
-        price: number().required('Price is required'),
-        quantity: number().required('Quantity is required'),
-        category: string().required('Category is required'),
-        description: string().required('Description is required')
+    const editProductSchema = yup.object({
+        name: yup.string().required('Name is required'),
+        price: yup.number().required('Price is required'),
+        quantity: yup.number().required('Quantity is required'),
+        category: yup.string().required('Category is required'),
+        description: yup.string().required('Description is required')
     });
 
     return (
