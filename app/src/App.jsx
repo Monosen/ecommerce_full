@@ -25,16 +25,11 @@ const App = () => {
                 let getToken = sessionStorage.getItem('token');
 
                 if (getToken && !token) {
-                    const { data } = await axios.get(
-                        `${
-                            import.meta.env.VITE_APP_API_URL
-                        }/api/v1/users/get-user`,
-                        {
-                            headers: {
-                                Authorization: `Bearer ${getToken}`
-                            }
+                    const { data } = await axios.get(`/api/v1/users/get-user`, {
+                        headers: {
+                            Authorization: `Bearer ${getToken}`
                         }
-                    );
+                    });
                     const { user } = data.data;
 
                     dispatch(

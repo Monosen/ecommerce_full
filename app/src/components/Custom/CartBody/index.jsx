@@ -18,14 +18,9 @@ const CartBody = ({ cartNavbar, handlerCartNavBar }) => {
     useEffect(() => {
         const handlerAllProductCart = async () => {
             if (token) {
-                const { data } = await axios.get(
-                    `${
-                        import.meta.env.VITE_APP_API_URL
-                    }/api/v1/orders/get-cart`,
-                    {
-                        headers: { Authorization: `Bearer ${token}` }
-                    }
-                );
+                const { data } = await axios.get(`/api/v1/orders/get-cart`, {
+                    headers: { Authorization: `Bearer ${token}` }
+                });
                 const { cart } = data.data;
                 console.log(cart);
                 setCartServer(cart);

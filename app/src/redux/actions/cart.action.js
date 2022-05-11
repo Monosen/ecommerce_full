@@ -6,9 +6,7 @@ export const handlerProductInCart = ({ name, price, quantity, id, token }) => {
     return async (dispatch) => {
         try {
             await axios.post(
-                `${
-                    import.meta.env.VITE_APP_API_URL
-                }/api/v1/orders/add-product-to-cart`,
+                `/api/v1/orders/add-product-to-cart`,
                 {
                     product: {
                         id,

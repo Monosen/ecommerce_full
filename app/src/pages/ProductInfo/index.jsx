@@ -24,9 +24,7 @@ const ProductInfo = () => {
     useEffect(() => {
         const handlerFetchData = async () => {
             try {
-                const { data } = await axios.get(
-                    `${import.meta.env.VITE_APP_API_URL}/api/v1/products/${id}`
-                );
+                const { data } = await axios.get(`/api/v1/products/${id}`);
                 const { product } = data.data;
                 setLoader(false);
                 console.log(product);

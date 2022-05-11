@@ -11,12 +11,9 @@ const index = () => {
 
     useEffect(() => {
         const handlerAllProducts = async () => {
-            const { data } = await axios.get(
-                `${
-                    import.meta.env.VITE_APP_API_URL
-                }/api/v1/products/user-products`,
-                { headers: { Authorization: `Bearer ${token}` } }
-            );
+            const { data } = await axios.get(`/api/v1/products/user-products`, {
+                headers: { Authorization: `Bearer ${token}` }
+            });
 
             const { products } = data.data;
             console.log(products);

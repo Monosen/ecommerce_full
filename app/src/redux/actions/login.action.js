@@ -4,12 +4,9 @@ import { loginTypes } from '../types/login.types';
 export const handlerLoginWithEmailAction = (userInfo) => {
     return async (dispatch) => {
         try {
-            const { data } = await axios.post(
-                `${import.meta.env.VITE_APP_API_URL}/api/v1/users/login`,
-                {
-                    ...userInfo
-                }
-            );
+            const { data } = await axios.post(`/api/v1/users/login`, {
+                ...userInfo
+            });
 
             const { token, user } = data.data;
 
@@ -33,10 +30,7 @@ export const handlerFillUserInfoAction = (userInfo) => {
 export const handlerCreateAccount = (infoUser) => {
     return async (dispatch) => {
         try {
-            const { data } = await axios.post(
-                `${import.meta.env.VITE_APP_API_URL}/api/v1/users`,
-                { ...infoUser }
-            );
+            const { data } = await axios.post(`/api/v1/users`, { ...infoUser });
 
             const { email } = data.data.user;
             const { password } = infoUser;

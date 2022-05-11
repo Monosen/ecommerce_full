@@ -12,9 +12,7 @@ const Home = () => {
 
     useEffect(() => {
         const handlerFetchData = async () => {
-            const { data } = await axios.get(
-                `${import.meta.env.VITE_APP_API_URL}/api/v1/products`
-            );
+            const { data } = await axios.get(`/api/v1/products`);
             const { products } = data.data;
             setAllProducts(products);
         };
