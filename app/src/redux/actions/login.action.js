@@ -1,14 +1,13 @@
 import axios from 'axios';
 import { loginTypes } from '../types/login.types';
 
-export const handlerLoginWithEmailAction = ({ email, password }) => {
+export const handlerLoginWithEmailAction = (userInfo) => {
     return async (dispatch) => {
         try {
             const { data } = await axios.post(
                 `${import.meta.env.VITE_APP_API_URL}/api/v1/users/login`,
                 {
-                    email,
-                    password
+                    ...userInfo
                 }
             );
 
@@ -17,11 +16,9 @@ export const handlerLoginWithEmailAction = ({ email, password }) => {
             sessionStorage.setItem('token', token);
 
             dispatch(handlerFillUserInfoAction({ user, token }));
-
-            return true;
         } catch (error) {
             console.log(error);
-            return false;
+            return 'Credentials are not valid';
         }
     };
 };
@@ -44,10 +41,10 @@ export const handlerCreateAccount = (infoUser) => {
             const { email } = data.data.user;
             const { password } = infoUser;
 
-            return dispatch(handlerLoginWithEmailAction({ email, password }));
+            dispatch(handlerLoginWithEmailAction({ email, password }));
         } catch (error) {
             console.log(error);
-            return false;
+            return 'Credentials are not valid';
         }
     };
 };

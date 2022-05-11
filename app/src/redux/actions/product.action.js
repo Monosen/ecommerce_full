@@ -1,6 +1,8 @@
 import axios from 'axios';
+import { useSelector } from 'react-redux';
 
 export const productEdit = (productData, id) => {
+    const { token } = useSelector((store) => store.session);
     return async () => {
         try {
             await axios.patch(
@@ -8,9 +10,7 @@ export const productEdit = (productData, id) => {
                 { product: productData },
                 {
                     headers: {
-                        Authorization: `Bearer ${sessionStorage.getItem(
-                            'token'
-                        )}`
+                        Authorization: `Bearer ${token}`
                     }
                 }
             );
@@ -21,15 +21,14 @@ export const productEdit = (productData, id) => {
 };
 
 export const productDelete = (id) => {
+    const { token } = useSelector((store) => store.session);
     return async () => {
         try {
             await axios.delete(
                 `${import.meta.env.VITE_APP_API_URL}/api/v1/products/${id}`,
                 {
                     headers: {
-                        Authorization: `Bearer ${sessionStorage.getItem(
-                            'token'
-                        )}`
+                        Authorization: `Bearer ${token}`
                     }
                 }
             );
@@ -40,6 +39,7 @@ export const productDelete = (id) => {
 };
 
 export const createNewProduct = (productData) => {
+    const { token } = useSelector((store) => store.session);
     return async () => {
         try {
             const response = await axios.post(
@@ -47,9 +47,7 @@ export const createNewProduct = (productData) => {
                 productData,
                 {
                     headers: {
-                        Authorization: `Bearer ${sessionStorage.getItem(
-                            'token'
-                        )}`
+                        Authorization: `Bearer ${token}`
                     }
                 }
             );

@@ -22,16 +22,16 @@ const App = () => {
     useEffect(() => {
         const handlerLoginWithToken = async () => {
             try {
-                if (sessionStorage.getItem('token') && !token) {
+                let getToken = sessionStorage.getItem('token');
+
+                if (getToken && !token) {
                     const { data } = await axios.get(
                         `${
                             import.meta.env.VITE_APP_API_URL
                         }/api/v1/users/get-user`,
                         {
                             headers: {
-                                Authorization: `Bearer ${sessionStorage.getItem(
-                                    'token'
-                                )}`
+                                Authorization: `Bearer ${getToken}`
                             }
                         }
                     );
@@ -40,7 +40,7 @@ const App = () => {
                     dispatch(
                         handlerFillUserInfoAction({
                             user,
-                            token: sessionStorage.getItem('token')
+                            token: getToken
                         })
                     );
                 }

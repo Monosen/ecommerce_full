@@ -1,15 +1,21 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
-import FormLogin from '../../components/Login/FormLogin';
+import { FormLogin } from '../../components/Login/FormLogin';
 import ButtonHome from '../../components/Custom/ButtonHome';
 import Loader from '../../components/Custom/Loader';
 
 const Login = () => {
     const [loader, setLoader] = useState(false);
 
-    const handlerLoader = () => {
-        setLoader(!loader);
+    const handlerLoader = (value) => {
+        setLoader(value);
     };
+
+    useEffect(() => {
+        return () => {
+            setLoader(false);
+        };
+    }, []);
 
     return (
         <div className="flex flex-col min-h-screen lg:flex-row">
@@ -18,7 +24,7 @@ const Login = () => {
             </div>
             <div className="basis-6/12 min-h-[60vh] flex items-center lg:min-h-screen">
                 <div className="container w-8/12 mx-auto">
-                    <FormLogin handlerLoader={handlerLoader} loader={loader} />
+                    <FormLogin handlerLoader={handlerLoader} />
                 </div>
             </div>
             {loader && (
