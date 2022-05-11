@@ -1,50 +1,50 @@
-const express = require("express");
+const express = require('express')
 
 // Controllers
 const {
-	addProductToCart,
-	getUserCart,
-	updateProductCart,
-	purchaseOrder,
-	getAllOrders,
-	getOrderById,
-	disableProductToCart,
-} = require("../controllers/orders.controller");
+  addProductToCart,
+  getUserCart,
+  updateProductCart,
+  purchaseOrder,
+  getAllOrders,
+  getOrderById,
+  disableProductToCart
+} = require('../controllers/orders.controller')
 
 // Middlewares
 const {
-	updateProductCartValidations,
-	validateResult,
-} = require("../middlewares/validators.middleware");
-const { protectSession } = require("../middlewares/auth.middleware");
+  updateProductCartValidations,
+  validateResult
+} = require('../middlewares/validators.middleware')
+const { protectSession } = require('../middlewares/auth.middleware')
 
-const router = express.Router();
+const router = express.Router()
 
-router.use(protectSession);
+router.use(protectSession)
 
 // Get user's orders
-router.get("/", getAllOrders);
+router.get('/', getAllOrders)
 
 // Get user's cart
-router.get("/get-cart", getUserCart);
+router.get('/get-cart', getUserCart)
 
 // Add product to cart
-router.post("/add-product-to-cart", addProductToCart);
+router.post('/add-product-to-cart', addProductToCart)
 
 // Update cart product quantity
 router.patch(
-	"/update-cart-product",
-	updateProductCartValidations,
-	validateResult,
-	updateProductCart
-);
+  '/update-cart-product',
+  updateProductCartValidations,
+  validateResult,
+  updateProductCart
+)
 
 // Remove product from cart
-router.delete("/product/:id", disableProductToCart);
+router.delete('/product/:id', disableProductToCart)
 
 // Create order
-router.get("/purchase-order", purchaseOrder);
+router.get('/purchase-order', purchaseOrder)
 
-router.get("/:id", getOrderById);
+router.get('/:id', getOrderById)
 
-module.exports = { ordersRouter: router };
+module.exports = { ordersRouter: router }

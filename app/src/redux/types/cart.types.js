@@ -1,6 +1,6 @@
 export const productInCartTypes = {
-    ADD: 'ADD',
-    SUB: 'SUB',
-    ADDALL: 'ADDALL',
-    DELETE: 'DELETE'
-};
+  ADD: 'ADD',
+  SUB: 'SUB',
+  ADDALL: 'ADDALL',
+  DELETE: 'DELETE'
+}

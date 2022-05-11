@@ -1,4 +1,4 @@
 export const loginTypes = {
-	LOGIN: "LOGIN",
-	LOGOUP: "LOGOUP",
-};
+  LOGIN: 'LOGIN',
+  LOGOUP: 'LOGOUP'
+}

@@ -30,6 +30,10 @@
     },
     "homepage": "https://github.com/Monosen/ecommerce_full#readme",
     "devDependencies": {
-        "npm-run-all": "^4.1.5"
+        "npm-run-all": "^4.1.5",
+        "standard": "^17.0.0"
+    },
+    "eslintConfig": {
+        "extends": "./node_modules/standard/eslintrc.json"
     }
 }

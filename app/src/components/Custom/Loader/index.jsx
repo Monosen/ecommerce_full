@@ -1,16 +1,14 @@
-import React from 'react';
+import React from 'react'
 
-import './index.styles.css';
+import './index.styles.css'
 
-const Loader = () => {
-    return (
-        <div className="lds-ring">
-            <div></div>
-            <div></div>
-            <div></div>
-            <div></div>
-        </div>
-    );
-};
-
-export default Loader;
+export const Loader = () => {
+  return (
+    <div className='lds-ring'>
+      <div />
+      <div />
+      <div />
+      <div />
+    </div>
+  )
+}
